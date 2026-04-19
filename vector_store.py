@@ -12,19 +12,21 @@ class VectorStore:
 
     def add(self, chunks: list, vectors: list, metadata: dict):
         ids = [str(uuid.uuid4()) for _ in chunks]
-        metas = [
+
+        documents = [c.text for c in chunks]
+        metadatas = [
             {
-                "filename" : metadata["filename"],
-                "doc_id"   : metadata["doc_id"],
-                "chunk_index": i
+                **c.metadata,
+                "doc_id": metadata["doc_id"]
             }
-            for i in range(len(chunks))
+            for c in chunks
         ]
+
         self.collection.add(
-            ids        = ids,
-            documents  = chunks,
-            embeddings = vectors,
-            metadatas  = metas
+            ids=ids,
+            documents=documents,
+            embeddings=vectors,
+            metadatas=metadatas
         )
 
     def search(self, query_vector: list, k: int = 5) -> dict:

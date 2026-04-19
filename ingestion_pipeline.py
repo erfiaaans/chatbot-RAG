@@ -16,7 +16,6 @@ class IngestionPipeline:
         all_chunks = []
         all_vectors = []
 
-        import uuid
         doc_id = str(uuid.uuid4())
 
         for doc in documents:
