@@ -11,7 +11,7 @@ class IngestionPipeline:
         self.chunker = TextChunker()
         self.embedder = EmbeddingService()
         self.store = VectorStore()
-        
+
     def run_documents(self, documents: list[dict]) -> dict:
         all_chunks = []
         all_vectors = []
@@ -19,10 +19,7 @@ class IngestionPipeline:
         doc_id = str(uuid.uuid4())
 
         for doc in documents:
-            chunks = self.chunker.chunk(
-                text=doc["text"],
-                metadata=doc
-            )
+            chunks = self.chunker.chunk(text=doc["text"], metadata=doc)
             vectors = [self.embedder.embed(c.text) for c in chunks]
 
             all_chunks.extend(chunks)
@@ -31,18 +28,16 @@ class IngestionPipeline:
         self.store.add(
             chunks=all_chunks,
             vectors=all_vectors,
-            metadata={
-                "doc_id": doc_id,
-                "total_files": len(documents)
-            }
+            metadata={"doc_id": doc_id, "total_files": len(documents)},
         )
-
-        return {
+        data = {
             "status": "berhasil",
             "total_files": len(documents),
             "total_chunks": len(all_chunks),
-            "doc_id": doc_id
+            "doc_id": doc_id,
         }
+        print(data)
+        return data
 
     # ==============================
     # 🔥 INGEST SINGLE FILE
@@ -50,10 +45,7 @@ class IngestionPipeline:
     def run(self, file_path: str) -> dict:
         doc = self.loader.load(file_path)
 
-        chunks = self.chunker.chunk(
-            text=doc["text"],
-            metadata=doc
-        )
+        chunks = self.chunker.chunk(text=doc["text"], metadata=doc)
 
         vectors = [self.embedder.embed(c.text) for c in chunks]
 
@@ -65,15 +57,15 @@ class IngestionPipeline:
             metadata={
                 "filename": doc["filename"],
                 "category": doc.get("category"),
-                "doc_id": doc_id
-            }
+                "doc_id": doc_id,
+            },
         )
 
         return {
             "status": "berhasil",
             "filename": doc["filename"],
             "chunks": len(chunks),
-            "doc_id": doc_id
+            "doc_id": doc_id,
         }
 
     # ==============================
@@ -88,10 +80,7 @@ class IngestionPipeline:
         doc_id = str(uuid.uuid4())
 
         for doc in documents:
-            chunks = self.chunker.chunk(
-                text=doc["text"],
-                metadata=doc
-            )
+            chunks = self.chunker.chunk(text=doc["text"], metadata=doc)
 
             vectors = [self.embedder.embed(c.text) for c in chunks]
 
@@ -101,17 +90,14 @@ class IngestionPipeline:
         self.store.add(
             chunks=all_chunks,
             vectors=all_vectors,
-            metadata={
-                "doc_id": doc_id,
-                "total_files": len(documents)
-            }
+            metadata={"doc_id": doc_id, "total_files": len(documents)},
         )
 
         return {
             "status": "berhasil",
             "total_files": len(documents),
             "total_chunks": len(all_chunks),
-            "doc_id": doc_id
+            "doc_id": doc_id,
         }
 
     # ==============================

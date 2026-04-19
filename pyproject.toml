@@ -17,7 +17,5 @@ dependencies = [
     "llama-index-embeddings-huggingface>=0.7.0",
 ]
 
-[tool.uv]
-dev-dependencies = [
-    "gunicorn"
-]
+[dependency-groups]
+dev = ["gunicorn"]

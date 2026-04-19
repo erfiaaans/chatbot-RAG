@@ -3,15 +3,15 @@ from typing import List
 
 from llama_index.core import Document
 from llama_index.core.node_parser import SentenceSplitter
+from config import settings
 
-from config import CHUNK_SIZE, CHUNK_OVERLAP
 
 class TextChunker:
     def __init__(self):
         self.splitter = SentenceSplitter(
-            chunk_size=CHUNK_SIZE,
-            chunk_overlap=CHUNK_OVERLAP,
-            separator="\n\n"
+            chunk_size=settings.chunk_size,
+            chunk_overlap=settings.chunk_overlap,
+            separator="\n\n",
         )
 
     # ==============================
@@ -68,8 +68,8 @@ class TextChunker:
                                 "source": metadata.get("filename"),
                                 "category": metadata.get("category"),
                                 "path": metadata.get("path"),
-                                "header": header
-                            }
+                                "header": header,
+                            },
                         )
                     )
 

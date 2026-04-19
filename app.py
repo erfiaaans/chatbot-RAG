@@ -7,6 +7,10 @@ from flask import Flask, request, jsonify, render_template, Response
 from rag_pipeline import RAGPipeline
 from ingestion_pipeline import IngestionPipeline
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 app = Flask(__name__)
 
 rag = RAGPipeline()
@@ -16,7 +20,7 @@ ingestor = IngestionPipeline()
 # print(result)
 
 # documents = ingestor.loader.load_folder("./documents/Skripsi/KB_PEDOMAN_SKRIPSI_BAB II.md")
-# result = ingestor.run_documents([documents]) 
+# result = ingestor.run_documents([documents])
 # paths = [
 #     "./documents/Skripsi/bab1.md",
 #     "./documents/Magang/laporan1.md"
@@ -105,4 +109,4 @@ def reset():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=False)
