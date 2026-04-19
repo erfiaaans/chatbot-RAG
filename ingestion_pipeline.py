@@ -12,8 +12,9 @@ class IngestionPipeline:
         self.store     = VectorStore()
 
     def run(self, file_path: str) -> dict:
-        doc     = self.loader.load(file_path)
-        chunks  = self.chunker.chunk(doc["text"])
+        # doc     = self.loader.load(file_path)
+        # chunks  = self.chunker.chunk(doc["text"])
+        chunks = ["chunk 1", "chunk 2", "chunk 3"] # untuk testing
         vectors = [self.embedder.embed(chunk) for chunk in chunks]
         doc_id  = str(uuid.uuid4())
         self.store.add(

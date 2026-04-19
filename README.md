@@ -79,3 +79,10 @@ chatbot-rag/
 ## 👨‍💻 Author
 
 ## **ERFIA NADIA SAFARI**
+
+## Run
+
+```
+uv sync
+uv run python app.py
+```

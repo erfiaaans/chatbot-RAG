@@ -1,0 +1,22 @@
+[project]
+name = "chatbot-rag"
+version = "0.1.0"
+description = "RAG Chatbot Akademik TIF"
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "flask",
+    "chromadb",
+    "pypdf",
+    "langchain-text-splitters",
+    "python-dotenv",
+    "google-genai>=1.73.1",
+    "python-docx>=1.2.0",
+    "llama-index>=0.14.20",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "gunicorn"
+]
