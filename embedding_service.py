@@ -1,12 +1,24 @@
-# from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer  # type: ignore
+from config import settings
+
+_model = None
+
+
+def get_model():
+    global _model
+    if _model is None:
+        print("Loading embedding model...")
+        _model = SentenceTransformer(
+            settings.embedding_model,
+            cache_folder="./hf_cache",
+        )
+        print("Embedding model berhasil di-load")
+    return _model
+
 
 class EmbeddingService:
     def __init__(self):
-        self.model = SentenceTransformer(
-            "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-            cache_folder="./hf_cache"
-        )
+        self.model = get_model()
 
     def embed(self, text: str) -> list[float]:
         return self.model.encode(text).tolist()

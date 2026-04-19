@@ -36,21 +36,26 @@ class RAGPipeline:
     def dummy_rag_query(self, question):
         chunks = self.retriever.retrieve(question)
 
-        chunk_text = "\n\n".join(
-            [
-                f"[Chunk {i + 1}]\n{c.page_content if hasattr(c, 'page_content') else str(c)}"
-                for i, c in enumerate(chunks)
-            ]
-        )
+        if not chunks:
+            return {"answer": "Informasi tidak ditemukan dalam dokumen.", "sources": []}
 
-        sources = list(
-            {
-                c.metadata.get("source")
-                for c in chunks
-                if hasattr(c, "metadata") and c.metadata.get("source")
-            }
-        )
+        lines = []
+        lines.append(f'Jawaban untuk: "{question}"')
+        lines.append("")
+        lines.append("--- HASIL RETRIEVAL ---")
+        lines.append("")
 
-        answer = f"Jawaban untuk: '{question}'\n\n--- CHUNKS ---\n{chunk_text}"
+        for i, c in enumerate(chunks, 1):
+            lines.append(f"[Chunk {i}]")
+            lines.append(f"Source   : {c['source']}")
+            lines.append(f"Category : {c['category']}")
+            lines.append(f"Header   : {c['header']}")
+            lines.append(f"Path     : {c['path']}")
+            lines.append(f"Score    : {c['score']}")
+            lines.append("Text:")
+            lines.append(c["text"])
+            lines.append("")
 
-        return {"answer": answer, "sources": ", ".join(sources)}
+        sources = list({c["source"] for c in chunks if c["source"]})
+
+        return {"answer": "\n".join(lines), "sources": sources}

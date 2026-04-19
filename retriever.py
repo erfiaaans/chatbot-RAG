@@ -20,13 +20,23 @@ class Retriever:
     def retrieve(self, question: str) -> list[dict]:
         vector = self.embedder.embed_query(question)
         results = self.store.search(vector, k=settings.top_k)
+
+        documents = results.get("documents", [[]])[0]
+        metadatas = results.get("metadatas", [[]])[0]
+        distances = results.get("distances", [[]])[0]
+
         chunks = []
-        for i, doc in enumerate(results["documents"][0]):
+
+        for doc, meta, distance in zip(documents, metadatas, distances):
             chunks.append(
                 {
-                    "text": doc,
-                    "filename": results["metadatas"][0][i]["filename"],
-                    "score": 1 - results["distances"][0][i],
+                    "text": doc.strip(),
+                    "source": meta.get("source", "-"),
+                    "category": meta.get("category", "-"),
+                    "header": meta.get("header", ""),
+                    "path": meta.get("path", "-"),
+                    "score": round(1 - distance, 4),
                 }
             )
+
         return chunks

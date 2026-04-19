@@ -17,7 +17,6 @@ rag = RAGPipeline()
 ingestor = IngestionPipeline()
 # documents = ingestor.loader.load_folder("./documents")
 # result = ingestor.run_documents(documents)
-# print(result)
 
 # documents = ingestor.loader.load_folder("./documents/Skripsi/KB_PEDOMAN_SKRIPSI_BAB II.md")
 # result = ingestor.run_documents([documents])
@@ -51,32 +50,38 @@ def chat():
 
     def generate():
         try:
+            import re
+
             # ambil jawaban dari RAG
             result = rag.dummy_rag_query(question)
+
             answer = result["answer"]
             sources = result.get("sources", [])
 
-            full_text = ""
+            #  preserve spasi + newline
+            tokens = re.findall(r"\S+|\s+", answer)
 
-            # fake streaming
-            for word in answer.split():
-                token = word + " "
-                full_text += token
+            for token in tokens:
+                payload = json.dumps({"token": token}, ensure_ascii=False)
 
-                payload = json.dumps({"token": token})
                 yield f"data: {payload}\n\n"
 
-                time.sleep(0.03)  #  agar smooth
-            # kirim sources di akhir
-            yield f"data: {json.dumps({'sources': sources})}\n\n"
+                time.sleep(0.02)
 
-            # tanda selesai
+            #  send source at the end
+            yield f"data: {json.dumps({'sources': sources}, ensure_ascii=False)}\n\n"
+
+            # finished
             yield f"data: {json.dumps({'done': True})}\n\n"
 
         except Exception as e:
-            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+            yield f"data: {json.dumps({'error': str(e)}, ensure_ascii=False)}\n\n"
 
-    return Response(generate(), content_type="text/event-stream")
+    return Response(
+        generate(),
+        content_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 # ==============================
