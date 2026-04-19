@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot Akademik — Prodi TIF UNIPMA</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">🎓</div>
+        <div class="logo-text">
+          <h1>Chatbot TIF</h1>
+          <p>Asisten Akademik</p>
+        </div>
+      </div>
+
+      <!-- <div class="sidebar-section">
+        <div class="sidebar-label">Unggah Dokumen</div>
+        <div class="upload-area" id="dropZone">
+          <input type="file" id="fileInput" accept=".pdf,.docx,.md" multiple />
+          <div class="upload-icon">📄</div>
+          <p><span>Pilih file</span> atau seret ke sini<br />PDF, DOCX, MD</p>
+        </div>
+        <div class="upload-progress" id="uploadProgress">
+          <div class="upload-progress-bar" id="uploadBar"></div>
+        </div>
+        <button class="upload-btn" id="uploadBtn" onclick="uploadFile()">
+          ⬆ Indeks Dokumen
+        </button>
+      </div> -->
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">Riwayat Chat</div>
+        <div class="doc-list" id="docList">
+          <div class="doc-empty">Belum Riwayat Chat</div>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        <div class="status-dot"></div>
+        <span>Gemini API terhubung</span>
+      </div>
+    </aside>
+
+    <!-- MAIN CHAT -->
+    <main class="main">
+      <header class="chat-header">
+        <div class="chat-header-left">
+          <div>
+            <div class="chat-title">Chatbot Akademik</div>
+            <div class="chat-subtitle">Prodi Teknik Informatika — UNIPMA</div>
+          </div>
+        </div>
+        <div class="chat-header-right">
+          <!-- <div class="header-badge">🔍 RAG + ChromaDB</div> -->
+          <button class="reset-btn" onclick="resetChat()">↺ Refresh</button>
+        </div>
+      </header>
+
+      <div class="messages" id="messages">
+        <div class="welcome" id="welcome">
+          <div class="welcome-icon">🤖</div>
+          <h2>Halo, Mahasiswa TIF!</h2>
+          <p>
+            Tanyakan informasi akademik Program Studi Teknik Informatika
+            Universitas PGRI Madiun.
+          </p>
+          <div class="suggestions">
+            <button
+              class="suggestion-chip"
+              onclick="sendSuggestion(this.textContent)"
+            >
+              Jadwal kuliah semester ini?
+            </button>
+            <button
+              class="suggestion-chip"
+              onclick="sendSuggestion(this.textContent)"
+            >
+              Syarat sidang skripsi?
+            </button>
+            <button
+              class="suggestion-chip"
+              onclick="sendSuggestion(this.textContent)"
+            >
+              Prosedur pengisian KRS?
+            </button>
+            <button
+              class="suggestion-chip"
+              onclick="sendSuggestion(this.textContent)"
+            >
+              Informasi beasiswa KIP?
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-area">
+        <div class="input-box">
+          <textarea
+            id="questionInput"
+            placeholder="Tanyakan sesuatu tentang akademik Prodi TIF UNIPMA..."
+            rows="1"
+            onkeydown="handleKey(event)"
+            oninput="autoResize(this)"
+          >
+          </textarea>
+          <button
+            class="send-btn"
+            id="sendBtn"
+            onclick="sendMessage()"
+            title="Kirim"
+          >
+            <svg viewBox="0 0 24 24">
+              <path d="M2 21l21-9L2 3v7l15 2-15 2z" />
+            </svg>
+          </button>
+        </div>
+        <div class="input-hint">
+          Enter untuk kirim &nbsp;·&nbsp; Shift+Enter untuk baris baru
+        </div>
+      </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
+</html>
