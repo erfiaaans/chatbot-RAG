@@ -27,3 +27,9 @@ class RAGPipeline:
 
     def reset_history(self):
         self.history = []
+        
+    def dummy_rag_query(self, question):
+        return {
+            "answer": f"Ini jawaban dummy untuk pertanyaan: '{question}'. Sistem sedang dalam tahap pengembangan streaming chatbot.",
+            "sources": ["dokumen1.pdf", "panduan_skripsi.md"]
+        }

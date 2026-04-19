@@ -34,7 +34,9 @@ async function sendMessage() {
     input.value = '';
     input.style.height = 'auto';
 
-    const typingId = appendTyping();
+    const botId = appendMessage('bot', '');
+    const botBubble = document.querySelector(`#${botId} .bubble`);
+
     setLoading(true);
 
     try {
@@ -43,45 +45,74 @@ async function sendMessage() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ question })
         });
-        const data = await res.json();
-        removeTyping(typingId);
-        if (data.error) {
-            appendMessage('bot', '⚠️ ' + data.error);
-        } else {
-            appendMessage('bot', data.answer, data.sources || []);
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+
+        let fullText = '';
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value);
+            const lines = chunk.split("\n");
+
+            for (let line of lines) {
+                if (line.startsWith("data: ")) {
+                    const data = JSON.parse(line.replace("data: ", ""));
+
+                    // 🔥 streaming token
+                    if (data.token) {
+                        fullText += data.token;
+                        botBubble.innerHTML = fullText;
+                    }
+
+                    // 📄 sources
+                    if (data.sources) {
+                        const sourcesHtml = `
+                            <div class="sources">
+                                ${data.sources.map(s => `<span class="source-tag">📄 ${s}</span>`).join('')}
+                            </div>
+                        `;
+                        botBubble.innerHTML += sourcesHtml;
+                    }
+
+                    // ❌ error
+                    if (data.error) {
+                        botBubble.innerHTML = "⚠️ " + data.error;
+                    }
+                }
+            }
         }
+
     } catch (err) {
-        removeTyping(typingId);
-        appendMessage('bot', '⚠️ Gagal terhubung ke server. Pastikan aplikasi berjalan.');
+        appendMessage('bot', '⚠️ Gagal streaming dari server.');
     } finally {
         setLoading(false);
     }
 }
-
 // ===== APPEND MESSAGE =====
-function appendMessage(role, text, sources = []) {
+function appendMessage(role, text) {
     const messages = document.getElementById('messages');
+    const id = 'msg-' + Date.now();
+
     const div = document.createElement('div');
     div.className = `message ${role}`;
+    div.id = id;
 
     const avatar = role === 'user' ? '👤' : '🤖';
-    let sourcesHtml = '';
-    if (sources.length > 0) {
-        sourcesHtml = `<div class="sources">
-      ${sources.map(s => `<span class="source-tag">📄 ${s}</span>`).join('')}
-    </div>`;
-    }
 
     div.innerHTML = `
-    <div class="avatar">${avatar}</div>
-    <div class="bubble">
-      ${escapeHtml(text).replace(/\n/g, '<br>')}
-      ${sourcesHtml}
-    </div>`;
+        <div class="avatar">${avatar}</div>
+        <div class="bubble">${text}</div>
+    `;
+
     messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
-}
 
+    return id;
+}
 // ===== TYPING INDICATOR =====
 function appendTyping() {
     const messages = document.getElementById('messages');
