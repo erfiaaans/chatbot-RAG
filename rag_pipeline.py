@@ -32,8 +32,34 @@ class RAGPipeline:
     def reset_history(self):
         self.history = []
         
+    # def dummy_rag_query(self, question):
+    #     return {
+    #         "answer": f"Ini jawaban dummy untuk pertanyaan: '{question}'. Sistem sedang dalam tahap pengembangan streaming chatbot.",
+    #         "sources": ["dokumen1.pdf", "panduan_skripsi.md"]
+    #     }
+        
     def dummy_rag_query(self, question):
+        chunks = self.retriever.retrieve(question)
+
+        chunk_text = "\n\n".join(
+            [
+                f"[Chunk {i+1}]\n{c.page_content if hasattr(c, 'page_content') else str(c)}"
+                for i, c in enumerate(chunks)
+            ]
+        )
+
+        sources = list({
+            c.metadata.get("source")
+            for c in chunks
+            if hasattr(c, "metadata") and c.metadata.get("source")
+        })
+
+        answer = (
+            f"Jawaban untuk: '{question}'\n\n"
+            f"--- CHUNKS ---\n{chunk_text}"
+        )
+
         return {
-            "answer": f"Ini jawaban dummy untuk pertanyaan: '{question}'. Sistem sedang dalam tahap pengembangan streaming chatbot.",
-            "sources": ["dokumen1.pdf", "panduan_skripsi.md"]
+            "answer": answer,
+            "sources": ", ".join(sources)
         }

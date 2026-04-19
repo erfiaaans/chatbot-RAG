@@ -1,0 +1,11 @@
+# PEDOMAN PENULISAN SKRIPSI FAKULTAS TEKNIK
+
+## BAB I PENDAHULUAN
+
+Menulis karya ilmiah merupakan salah satu ciri pokok kegiatan akademik di perguruan tinggi. Karya ilmiah merupakan karya tulis atau bentuk lainnya yang telah diakui dalam bidang ilmu pengetahuan, teknologi atau seni yang ditulis atau dikerjakan sesuai dengan tata cara ilmiah dan mengikuti pedoman atau kaidah serta etika keilmuan yang telah ditetapkan. Menulis karya ilmiah merupakan suatu kegiatan pelaporan dengan mengikuti pedoman ilmiah, oleh karena itu diperlukan adanya pedoman penulisan karya ilmiah. Pedoman penulisan karya ilmiah ini memberikan petunjuk tentang cara menulis karya ilmiah berupa skripsi dan artikel.
+
+Skripsi merupakan karya ilmiah dalam suatu bidang studi yang ditulis oleh mahasiswa Program Sarjana dan Program Vokasi pada akhir masa studinya. Skripsi juga merupakan salah satu persyaratan untuk menyelesaikan program studi bagi mahasiswa Skripsi Dapat ditulis berdasarkan hasil penelitian di lapangan atau hasil kajian pustaka, atau hasil pengembangan. Melalui pembuatan karya ilmiah dalam bentuk skripsi maka masyarakat akademik di perguruan tinggi dapat menginformasikan suatu penemuan atau gagasan baru dan juga hasil penelitian.
+
+Penulisan skripsi merupakan salah satu karya ilmiah yang pengungkapan hasil karya secara jelas, logis, sistematis dan metodologis mengenai masalah yang dikaji, dengan pendekatan pemecahan masalah yang jelas untuk memperoleh hasil serta implikasi yang dapat dipertanggungjawabkan secara ilmiah. Menyusun skripsi memerlukan dasar pengetahuan keilmuan sesuai bidang ilmu masing-masing, selain itu mahasiswa juga diperlukan adanya keterampilan menggunakan bahasa yang baik dan benar, kaidah-kaidah, penulisan, dan ketentuan ketentuan lain yang ditetapkan oleh lembaga pendidikan yang bersangkutan.
+
+Hasil penelitian yang telah dilakukan mahasiswa yang disusun dalam format penulisan skripsi, tidaklah cukup hanya dijilid dan disimpan di perpustakaan saja. Hasil penelitian yang telah dilakukan akan lebih bermakna luas dan dapat diimplementasikan apabila hasil penelitian dikemas dalam tulisan artikel untuk dipublikasikan. Publikasi dalam jurnal ilmiah dan seminar merupakan tuntutan wajib bagi peneliti setelah menyelesaikan penelitiannya.Mahasiswa juga dituntut untuk terampil menuliskan karya ilmiah sehingga layak dipublikasikan.

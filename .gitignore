@@ -11,7 +11,7 @@ __pycache__/
 chroma_db/
 
 # Documents (data sumber)
-documents/
+# documents/
 
 # Environment variables
 .env
@@ -22,3 +22,5 @@ documents/
 # OS files
 .DS_Store
 Thumbs.db
+
+hf_cache

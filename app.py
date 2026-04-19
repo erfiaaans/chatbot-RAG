@@ -11,9 +11,9 @@ app = Flask(__name__)
 
 rag = RAGPipeline()
 ingestor = IngestionPipeline()
-documents = ingestor.loader.load_folder("./documents")
-result = ingestor.run_documents(documents)
-print(result)
+# documents = ingestor.loader.load_folder("./documents")
+# result = ingestor.run_documents(documents)
+# print(result)
 
 # documents = ingestor.loader.load_folder("./documents/Skripsi/KB_PEDOMAN_SKRIPSI_BAB II.md")
 # result = ingestor.run_documents([documents]) 
