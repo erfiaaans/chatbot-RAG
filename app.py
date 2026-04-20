@@ -2,6 +2,7 @@ from flask import Flask
 from dotenv import load_dotenv
 from src.controllers.chat_controller import chat_bp
 from src.ingestion.ingestion_pipeline import IngestionPipeline
+from src.config import settings
 
 load_dotenv()
 
@@ -11,9 +12,7 @@ app.register_blueprint(chat_bp)
 # Inisialisasi dokumen saat startup
 ingestor = IngestionPipeline()
 documents = ingestor.loader.load_folder("./data")
-result = ingestor.run_documents(
-    documents=documents, overwrite=False, doc_id="akademik_tif_2026"
-)
+result = ingestor.run_documents(documents=documents, overwrite=False)
 print(result)
 
 # documents = ingestor.loader.load("./documents/Skripsi/KB_PEDOMAN_SKRIPSI_BAB I.md")

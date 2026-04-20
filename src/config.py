@@ -6,6 +6,8 @@ BASE_DIR = Path(__file__).resolve().parent
 
 
 class Settings(BaseSettings):
+    # huggingface
+    hf_token: str = Field(default="", alias="HF_TOKEN")
     # Gemini
     gemini_api_key: str = Field(default="", alias="GEMINI_API_KEY")
     embedding_model: str = Field(default="embedding-001", alias="EMBEDDING_MODEL")

@@ -3,6 +3,7 @@ from src.ingestion.document_loader import DocumentLoader
 from src.ingestion.text_chunker import TextChunker
 from src.services.embedding_service import EmbeddingService
 from src.services.vector_store import VectorStore
+from src.config import settings
 
 
 class IngestionPipeline:
@@ -14,28 +15,33 @@ class IngestionPipeline:
 
     def run_documents(
         self,
-        doc_id: str,
         documents: list[dict],
         overwrite: bool = False,
     ) -> dict:
+        # Check if the collection already contains anything
+        existing_count = self.store._get_collection_count()
+
+        if existing_count > 0 and not overwrite:
+            return {
+                "status": "skipped",
+                "collection_name": settings.collection_name,
+                "message": "Collection sudah ada, gunakan overwrite=True untuk menimpa",
+                "existing_chunks": existing_count,
+            }
+
+        if overwrite and existing_count > 0:
+            result_delete = self.store.delete_by_collection_name(
+                settings.collection_name
+            )
+            print(f"[overwrite] {result_delete}")
+
         all_chunks = []
         all_vectors = []
-        existing = self.store.collection.get(where={"doc_id": doc_id})
-        if existing.get("ids") and not overwrite:
-            return {
-                "status": "already exists",
-                "doc_id": doc_id,
-                "chunks": len(existing["ids"]),
-            }
-        if overwrite:
-            result_delete = self.store.delete_by_doc_id(doc_id=doc_id)
-            print(result_delete)
+        doc_id = str(uuid.uuid4())
 
         for doc in documents:
             chunks = self.chunker.chunk(text=doc["text"], metadata=doc)
-
             vectors = [self.embedder.embed(c.text) for c in chunks]
-
             all_chunks.extend(chunks)
             all_vectors.extend(vectors)
 
@@ -44,14 +50,15 @@ class IngestionPipeline:
             vectors=all_vectors,
             metadata={"doc_id": doc_id, "total_files": len(documents)},
         )
-        data = {
+
+        return {
             "status": "berhasil",
+            "collection_name": settings.collection_name,
             "doc_id": doc_id,
             "overwrite": overwrite,
             "total_files": len(documents),
             "total_chunks": len(all_chunks),
         }
-        return data
 
     # ==============================
     # INGEST SINGLE FILE
