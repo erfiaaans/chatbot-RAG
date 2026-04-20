@@ -14,21 +14,24 @@ class IngestionPipeline:
 
     def run_documents(
         self,
+        doc_id: str,
         documents: list[dict],
         overwrite: bool = False,
-        doc_id: str | None = None,
     ) -> dict:
         all_chunks = []
         all_vectors = []
-
-        doc_id = doc_id or str(uuid.uuid4())
+        existing = self.store.collection.get(where={"doc_id": doc_id})
+        if existing.get("ids") and not overwrite:
+            return {
+                "status": "already exists",
+                "doc_id": doc_id,
+                "chunks": len(existing["ids"]),
+            }
+        if overwrite:
+            result_delete = self.store.delete_by_doc_id(doc_id=doc_id)
+            print(result_delete)
 
         for doc in documents:
-            source = doc.get("source", "")
-
-            if overwrite and source:
-                self.store.delete(doc_id=doc_id)
-
             chunks = self.chunker.chunk(text=doc["text"], metadata=doc)
 
             vectors = [self.embedder.embed(c.text) for c in chunks]
@@ -48,11 +51,10 @@ class IngestionPipeline:
             "total_files": len(documents),
             "total_chunks": len(all_chunks),
         }
-        print(data)
         return data
 
     # ==============================
-    # 🔥 INGEST SINGLE FILE
+    # INGEST SINGLE FILE
     # ==============================
     def run(self, file_path: str) -> dict:
         doc = self.loader.load(file_path)
@@ -81,7 +83,7 @@ class IngestionPipeline:
         }
 
     # ==============================
-    # 🔥 INGEST FOLDER (INI YANG KAMU BUTUH)
+    # INGEST FOLDER (INI YANG KAMU BUTUH)
     # ==============================
     def run_folder(self, folder_path: str) -> dict:
         documents = self.loader.load_folder(folder_path)

@@ -46,17 +46,19 @@ class RAGPipeline:
         lines.append("")
 
         for i, c in enumerate(chunks, 1):
+            meta = c.get("meta", {})
+
             lines.append(f"[Chunk {i}]")
-            lines.append(f"Source   : {c['source']}")
-            lines.append(f"Category : {c['category']}")
-            lines.append(f"Header   : {c['header']}")
-            lines.append(f"Path     : {c['path']}")
-            lines.append(f"Score    : {c['score']}")
-            lines.append(f"key_id    : {c['key_id']}")
+            lines.append(f"Source   : {meta.get('source', '-')}")
+            lines.append(f"Category : {meta.get('category', '-')}")
+            lines.append(f"Header   : {meta.get('header', '-')}")
+            lines.append(f"Path     : {meta.get('path', '-')}")
+            lines.append(f"Score    : {c.get('distance', '-')}")
+            lines.append(f"Key ID   : {meta.get('key_id', '-')}")
             lines.append("Text:")
-            lines.append(c["text"])
+            lines.append(c.get("text", ""))
             lines.append("")
 
-        sources = list({c["source"] for c in chunks if c["source"]})
+        sources = list({meta.get("source") for c in chunks if (meta := c.get("meta"))})
 
         return {"answer": "\n".join(lines), "sources": sources}

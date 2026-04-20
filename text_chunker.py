@@ -23,66 +23,79 @@ class TextChunker:
         header_split = re.split(r"(#+ .+)", text)
 
         sections = []
-        header_stack = {}
+        header_stack = []  # FIX: pakai list (bukan dict)
 
         for part in header_split:
-            if re.match(r"#+ ", part):
-                level = part.count("#")
-                header_text = part.strip("# ").strip()
-                header_stack[level] = header_text
+            part = part.strip()
 
-                # hapus header level bawah
-                for l in list(header_stack.keys()):
-                    if l > level:
-                        del header_stack[l]
+            if not part:
+                continue
+
+            # ==============================
+            # DETECT HEADER
+            # ==============================
+            if re.match(r"#+ ", part):
+                level = len(part) - len(part.lstrip("#"))
+                header_text = part.strip("# ").strip()
+
+                # adjust hierarchy stack
+                header_stack = header_stack[: level - 1]
+                header_stack.append(header_text)
 
             else:
                 if part.strip():
-                    level1 = header_stack.get(1, "")
-                    level2 = header_stack.get(2, "")
-                    level3 = header_stack.get(3, "")
-                    level4 = header_stack.get(4, "")
-
-                    full_header = " ".join(
-                        h for h in [level1, level2, level3, level4] if h
-                    )
+                    # ==============================
+                    # BUILD BREADCRUMB STRING
+                    # ==============================
+                    full_header = " > ".join(header_stack).strip()
 
                     sections.append((full_header, part.strip()))
 
         chunk_id = 0
 
+        # ==============================
+        # CHUNKING
+        # ==============================
         for header, body in sections:
-            paragraphs = [p.strip() for p in body.split("\n\n") if p.strip()]
+            # normalize newline (stabil untuk embedding)
+            body = re.sub(r"(?<!\n)\n(?!\n)", " ", body)
 
-            for para in paragraphs:
-                sub_chunks = self.splitter.split_text(para)
+            sub_chunks = self.splitter.split_text(body)
 
-                for sc in sub_chunks:
-                    text_with_header = f"{header}\n\n{sc}" if header else sc
+            for sc in sub_chunks:
+                # ==============================
+                # COMBINE HEADER + CONTENT
+                # ==============================
+                text_with_header = f"{header}\n\n{sc}" if header else sc
 
-                    doc_id = f"{metadata['filename']}_chunk_{chunk_id}"
-                    doc = Document(
-                        id_=doc_id,
-                        text=text_with_header,
-                        metadata={
-                            "source": metadata.get("filename"),
-                            "category": metadata.get("category"),
-                            "path": metadata.get("path"),
-                            "header": header,
-                            "key_id": doc_id,
-                        },
-                    )
-                    docs.append(doc)
+                doc_id = f"{metadata['filename']}_chunk_{chunk_id}"
 
-                    print("\n" + "-" * 80)
-                    print(f"Chunk ID : {chunk_id}")
-                    print(f"Doc ID   : {doc_id}")
-                    print(f"Header   : {header if header else '-'}")
-                    print(f"Length   : {len(sc)} chars")
-                    print("-" * 80)
-                    print(sc)
-                    print("-" * 80)
+                doc = Document(
+                    id_=doc_id,
+                    text=text_with_header,
+                    metadata={
+                        "source": metadata.get("filename"),
+                        "category": metadata.get("category"),
+                        "path": metadata.get("path"),
+                        "header": header,
+                        "key_id": doc_id,
+                    },
+                )
 
-                    chunk_id += 1
+                docs.append(doc)
+
+                # ==============================
+                # DEBUG LOG
+                # ==============================
+                # print("\n" + "-" * 80)
+                # print(f"Chunk ID : {chunk_id}")
+                # print(f"Doc ID   : {doc_id}")
+                # print(f"Header   : {header if header else '-'}")
+                # print(f"Length   : {len(sc)} chars")
+                # print("-" * 80)
+                # print(text_with_header)
+                # print("-" * 80)
+
+                chunk_id += 1
 
         return docs

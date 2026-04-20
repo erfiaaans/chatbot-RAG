@@ -21,23 +21,14 @@ class Retriever:
         vector = self.embedder.embed_query(question)
         results = self.store.search(vector, k=settings.top_k)
 
-        documents = results.get("documents", [[]])[0]
-        metadatas = results.get("metadatas", [[]])[0]
-        distances = results.get("distances", [[]])[0]
+        docs = results.get("documents") or []
+        metas = results.get("metadatas") or []
+        dists = results.get("distances") or []
 
-        chunks = []
+        if not docs:
+            return []
 
-        for doc, meta, distance in zip(documents, metadatas, distances):
-            chunks.append(
-                {
-                    "text": doc.strip(),
-                    "source": meta.get("source", "-"),
-                    "category": meta.get("category", "-"),
-                    "header": meta.get("header", ""),
-                    "path": meta.get("path", "-"),
-                    "key_id": meta.get("key_id", "-"),
-                    "score": round(1 - distance, 4),
-                }
-            )
-
-        return chunks
+        return [
+            {"text": d, "meta": m, "distance": dist}
+            for d, m, dist in zip(docs[0], metas[0], dists[0])
+        ]
