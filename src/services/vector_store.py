@@ -1,6 +1,6 @@
 import chromadb
 import uuid
-from src.config import settings
+from src.config.config import settings
 from chromadb.api.types import QueryResult, Metadata
 
 

@@ -2,7 +2,7 @@ from flask import Flask
 from dotenv import load_dotenv
 from src.controllers.chat_controller import chat_bp
 from src.ingestion.ingestion_pipeline import IngestionPipeline
-from src.config import settings
+from src.config.config import settings
 
 load_dotenv()
 

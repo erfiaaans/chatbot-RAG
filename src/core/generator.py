@@ -1,5 +1,5 @@
 from google import genai
-from src.config import settings
+from src.config.config import settings
 
 
 class ContextAssembler:

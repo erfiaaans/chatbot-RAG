@@ -1,6 +1,6 @@
 from src.services.embedding_service import EmbeddingService
 from src.services.vector_store import VectorStore
-from src.config import settings
+from src.config.config import settings
 
 
 class QueryEmbedder:

@@ -2,7 +2,7 @@ from src.core.retriever import Retriever
 from src.core.generator import ContextAssembler, GeminiGenerator
 from src.ingestion.document_loader import DocumentLoader
 from src.ingestion.text_chunker import TextChunker
-from src.config import settings
+from src.config.config import settings
 
 
 class RAGPipeline:
