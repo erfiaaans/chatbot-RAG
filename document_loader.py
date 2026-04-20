@@ -1,6 +1,8 @@
 import os
 from pypdf import PdfReader
 from docx import Document
+import re
+
 
 class DocumentLoader:
     SUPPORTED = [".pdf", ".docx", ".md"]
@@ -22,11 +24,11 @@ class DocumentLoader:
             text = self._extract_md(path)
 
         return {
-            "text": text,
+            "text": text,  # type: ignore
             "filename": os.path.basename(path),
             "format": ext,
             "category": os.path.basename(os.path.dirname(path)),  #  tambahan
-            "path": path
+            "path": path,
         }
 
     # ==============================
@@ -56,8 +58,7 @@ class DocumentLoader:
     def _extract_pdf(self, path: str) -> str:
         reader = PdfReader(path)
         return "\n".join(
-            page.extract_text() for page in reader.pages
-            if page.extract_text()
+            page.extract_text() for page in reader.pages if page.extract_text()
         )
 
     # ==============================
@@ -65,10 +66,7 @@ class DocumentLoader:
     # ==============================
     def _extract_docx(self, path: str) -> str:
         doc = Document(path)
-        return "\n".join(
-            para.text for para in doc.paragraphs
-            if para.text.strip()
-        )
+        return "\n".join(para.text for para in doc.paragraphs if para.text.strip())
 
     # ==============================
     #  EXTRACT MARKDOWN
@@ -77,13 +75,7 @@ class DocumentLoader:
         with open(path, "r", encoding="utf-8") as f:
             text = f.read()
 
-        import re
-        text = re.sub(r"#{1,6}\s*", "", text)
-        text = re.sub(r"\*\*|\*|__", "", text)
-        text = re.sub(r"`{1,3}", "", text)
-        text = re.sub(r"\[.*?\]\(.*?\)", "", text)
-        text = re.sub(r"!\[.*?\]\(.*?\)", "", text)
-        text = re.sub(r"-{3,}|\*{3,}", "", text)
+        # optional cleaning aman:
         text = re.sub(r"\n{3,}", "\n\n", text)
 
         return text.strip()
