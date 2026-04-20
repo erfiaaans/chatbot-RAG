@@ -1,6 +1,8 @@
 import os
 import json
 import time
+import re
+import random
 from datetime import datetime
 from flask import Flask, request, jsonify, render_template, Response
 
@@ -50,40 +52,41 @@ def chat():
     if not question:
         return jsonify({"error": "Pertanyaan tidak boleh kosong."}), 400
 
+    start_time = datetime.now().strftime("%H:%M")
+    start = time.time()
+
     def generate():
         try:
-            import re
+            # fake thinking
+            time.sleep(random.uniform(0.2, 0.6))
 
-            # ambil jawaban dari RAG
+            # kirim TIME saja di awal
+            yield f"data: {json.dumps({'meta': {'time': start_time}}, ensure_ascii=False)}\n\n"
+
             result = rag.dummy_rag_query(question)
-
             answer = result["answer"]
             sources = result.get("sources", [])
 
-            #  preserve spasi + newline
             tokens = re.findall(r"\S+|\s+", answer)
 
             for token in tokens:
-                payload = json.dumps({"token": token}, ensure_ascii=False)
+                yield f"data: {json.dumps({'token': token}, ensure_ascii=False)}\n\n"
 
-                yield f"data: {payload}\n\n"
+                if token in [",", ".", "?", "!", ":"]:
+                    time.sleep(0.12)
+                else:
+                    time.sleep(random.uniform(0.01, 0.03))
 
-                time.sleep(0.02)
-
-            #  send source at the end
             yield f"data: {json.dumps({'sources': sources}, ensure_ascii=False)}\n\n"
 
-            # finished
-            yield f"data: {json.dumps({'done': True})}\n\n"
+            duration_ms = int((time.time() - start) * 1000)
+
+            yield f"data: {json.dumps({'done': True, 'meta': {'latency_ms': duration_ms}}, ensure_ascii=False)}\n\n"
 
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)}, ensure_ascii=False)}\n\n"
 
-    return Response(
-        generate(),
-        content_type="text/event-stream",
-        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
-    )
+    return Response(generate(), content_type="text/event-stream")
 
 
 # ==============================

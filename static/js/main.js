@@ -1,13 +1,13 @@
 const docList = [];
 let isLoading = false;
 
-// ===== AUTO RESIZE TEXTAREA =====
+// ===== AUTO RESIZE =====
 function autoResize(el) {
     el.style.height = 'auto';
     el.style.height = Math.min(el.scrollHeight, 120) + 'px';
 }
 
-// ===== HANDLE ENTER KEY =====
+// ===== ENTER =====
 function handleKey(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
@@ -15,10 +15,76 @@ function handleKey(e) {
     }
 }
 
-// ===== SUGGESTION CHIPS =====
+// ===== SUGGESTION =====
 function sendSuggestion(text) {
     document.getElementById('questionInput').value = text;
     sendMessage();
+}
+
+// ===== MESSAGE UI =====
+function appendMessage(role, text) {
+    const messages = document.getElementById('messages');
+    const id = 'msg-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+
+    const div = document.createElement('div');
+    div.className = `message ${role}`;
+    div.id = id;
+
+    const avatar = role === 'user' ? '👤' : '🤖';
+
+    div.innerHTML = `
+        <div class="avatar">${avatar}</div>
+        <div class="bubble-wrapper">
+            <div class="bubble">${text}</div>
+        </div>
+    `;
+
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+
+    return id;
+}
+
+// ===== TYPING =====
+function appendTyping() {
+    const messages = document.getElementById('messages');
+    const id = 'typing-' + Date.now();
+
+    const div = document.createElement('div');
+    div.className = 'message bot';
+    div.id = id;
+
+    div.innerHTML = `
+        <div class="avatar">🤖</div>
+        <div class="bubble">
+            <div class="typing"><span></span><span></span><span></span></div>
+        </div>
+    `;
+
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+
+    return id;
+}
+
+function removeTyping(id) {
+    document.getElementById(id)?.remove();
+}
+
+// ===== TIME (ONLY ONCE) =====
+function renderMeta(el, time, latency) {
+    const div = document.createElement("div");
+    div.className = "time";
+
+    const seconds = latency / 1000;
+
+    const formatted =
+        seconds < 1
+            ? `${latency} ms`
+            : `${seconds.toFixed(1)}s`;
+
+    div.innerText = `${time} • ${formatted}`;
+    el.querySelector('.bubble-wrapper').appendChild(div);
 }
 
 // ===== SEND MESSAGE =====
@@ -27,15 +93,16 @@ async function sendMessage() {
     const question = input.value.trim();
     if (!question || isLoading) return;
 
-    const welcome = document.getElementById('welcome');
-    if (welcome) welcome.remove();
-
     appendMessage('user', question);
+
     input.value = '';
     input.style.height = 'auto';
 
     const botId = appendMessage('bot', '');
-    const botBubble = document.getElementById(botId).querySelector('.bubble');
+    const botEl = document.getElementById(botId);
+    const botBubble = botEl.querySelector('.bubble');
+
+    const typingId = appendTyping();
 
     setLoading(true);
 
@@ -50,6 +117,11 @@ async function sendMessage() {
         const decoder = new TextDecoder();
 
         let fullText = '';
+        let sourcesRendered = false;
+        let botTime = null;
+        let botLatency = null;
+        let metaRendered = false;
+        let latencyRendered = false;
 
         while (true) {
             const { done, value } = await reader.read();
@@ -59,29 +131,48 @@ async function sendMessage() {
             const lines = chunk.split("\n");
 
             for (let line of lines) {
-                if (line.startsWith("data: ")) {
-                    const data = JSON.parse(line.replace("data: ", ""));
+                if (!line.startsWith("data: ")) continue;
 
-                    // 🔥 streaming token
-                    if (data.token) {
-                        fullText += data.token;
-                        botBubble.innerHTML = fullText;
-                    }
+                const data = JSON.parse(line.replace("data: ", ""));
 
-                    // 📄 sources
-                    if (data.sources) {
-                        const sourcesHtml = `
-                            <div class="sources">
-                                ${data.sources.map(s => `<span class="source-tag">📄 ${s}</span>`).join('')}
-                            </div>
-                        `;
-                        botBubble.innerHTML += sourcesHtml;
-                    }
+                // ===== TIME =====
+                if (data.meta?.time) {
+                    botTime = data.meta.time;
+                }
 
-                    // ❌ error
-                    if (data.error) {
-                        botBubble.innerHTML = "⚠️ " + data.error;
-                    }
+                // ===== LATENCY =====
+                if (data.meta?.latency_ms) {
+                    botLatency = data.meta.latency_ms;
+                }
+                // render ONLY ONCE
+                if (!metaRendered && botTime && botLatency) {
+                    metaRendered = true;
+                    renderMeta(botEl, botTime, botLatency);
+                }
+                // ===== STOP TYPING =====
+                if (data.token && typingId) {
+                    removeTyping(typingId);
+                }
+
+                // ===== STREAM TEXT =====
+                if (data.token) {
+                    fullText += data.token;
+                    botBubble.innerHTML = fullText;
+                }
+
+                // ===== SOURCES =====
+                if (data.sources && !sourcesRendered) {
+                    sourcesRendered = true;
+
+                    const sourcesHtml = `
+                        <div class="sources">
+                            ${data.sources.map(s =>
+                        `<span class="source-tag">📄 ${s}</span>`
+                    ).join('')}
+                        </div>
+                    `;
+
+                    botBubble.innerHTML = fullText + sourcesHtml;
                 }
             }
         }
@@ -92,171 +183,10 @@ async function sendMessage() {
         setLoading(false);
     }
 }
-// ===== APPEND MESSAGE =====
-function appendMessage(role, text) {
-    const messages = document.getElementById('messages');
-    const id = 'msg-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
 
-    const div = document.createElement('div');
-    div.className = `message ${role}`;
-    div.id = id;
-
-    const avatar = role === 'user' ? '👤' : '🤖';
-
-    div.innerHTML = `
-        <div class="avatar">${avatar}</div>
-        <div class="bubble">${text}</div>
-    `;
-
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
-
-    return id;
-}
-// ===== TYPING INDICATOR =====
-function appendTyping() {
-    const messages = document.getElementById('messages');
-    const id = 'typing-' + Date.now();
-    const div = document.createElement('div');
-    div.className = 'message bot';
-    div.id = id;
-    div.innerHTML = `
-    <div class="avatar">🤖</div>
-    <div class="bubble">
-      <div class="typing">
-        <span></span><span></span><span></span>
-      </div>
-    </div>`;
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
-    return id;
-}
-
-function removeTyping(id) {
-    const el = document.getElementById(id);
-    if (el) el.remove();
-}
-
-// ===== LOADING STATE =====
+// ===== LOADING =====
 function setLoading(state) {
     isLoading = state;
     document.getElementById('sendBtn').disabled = state;
     document.getElementById('questionInput').disabled = state;
 }
-
-// ===== UPLOAD FILE =====
-async function uploadFile() {
-    const fileInput = document.getElementById('fileInput');
-    const files = fileInput.files;
-    if (!files.length) {
-        showToast('Pilih file terlebih dahulu.', 'error');
-        return;
-    }
-
-    const btn = document.getElementById('uploadBtn');
-    const progress = document.getElementById('uploadProgress');
-    const bar = document.getElementById('uploadBar');
-    btn.disabled = true;
-    btn.textContent = 'Mengindeks...';
-    progress.classList.add('active');
-
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        bar.style.width = ((i / files.length) * 80) + '%';
-        const formData = new FormData();
-        formData.append('file', file);
-        try {
-            const res = await fetch('/upload', { method: 'POST', body: formData });
-            const data = await res.json();
-            if (data.status === 'berhasil') {
-                addDocToList(data.filename, data.chunks);
-                showToast(`✓ ${data.filename} berhasil diindeks (${data.chunks} chunk)`, 'success');
-            } else {
-                showToast(`✗ Gagal: ${data.error}`, 'error');
-            }
-        } catch {
-            showToast('Gagal terhubung ke server.', 'error');
-        }
-    }
-
-    bar.style.width = '100%';
-    setTimeout(() => {
-        progress.classList.remove('active');
-        bar.style.width = '0%';
-    }, 600);
-
-    btn.disabled = false;
-    btn.innerHTML = '⬆ Indeks Dokumen';
-    fileInput.value = '';
-}
-
-// ===== ADD DOC TO LIST =====
-function addDocToList(filename, chunks) {
-    if (docList.includes(filename)) return;
-    docList.push(filename);
-
-    const list = document.getElementById('docList');
-    const empty = list.querySelector('.doc-empty');
-    if (empty) empty.remove();
-
-    const ext = filename.split('.').pop().toUpperCase();
-    const icon = ext === 'PDF' ? '📕' : ext === 'DOCX' ? '📘' : '📝';
-    const item = document.createElement('div');
-    item.className = 'doc-item';
-    item.innerHTML = `
-    <span class="doc-icon">${icon}</span>
-    <span class="doc-name" title="${filename}">${filename}</span>
-    <span class="doc-badge">${chunks} chunk</span>`;
-    list.appendChild(item);
-}
-
-// ===== RESET CHAT =====
-async function resetChat() {
-    try { await fetch('/reset', { method: 'POST' }); } catch { }
-    document.getElementById('messages').innerHTML = `
-    <div class="welcome" id="welcome">
-      <div class="welcome-icon">🤖</div>
-      <h2>Halo, Mahasiswa TIF!</h2>
-      <p>Tanyakan informasi akademik Prodi TIF UNIPMA. Saya akan menjawab berdasarkan dokumen resmi yang telah diindeks.</p>
-      <div class="suggestions">
-        <button class="suggestion-chip" onclick="sendSuggestion(this.textContent)">Jadwal kuliah semester ini?</button>
-        <button class="suggestion-chip" onclick="sendSuggestion(this.textContent)">Syarat sidang skripsi?</button>
-        <button class="suggestion-chip" onclick="sendSuggestion(this.textContent)">Prosedur pengisian KRS?</button>
-        <button class="suggestion-chip" onclick="sendSuggestion(this.textContent)">Informasi beasiswa KIP?</button>
-      </div>
-    </div>`;
-    showToast('Riwayat percakapan direset.', 'success');
-}
-
-// ===== TOAST =====
-function showToast(msg, type = 'success') {
-    const existing = document.querySelector('.toast');
-    if (existing) existing.remove();
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = msg;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3500);
-}
-
-// ===== ESCAPE HTML =====
-function escapeHtml(text) {
-    return text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-}
-
-// ===== DRAG & DROP =====
-const dropZone = document.getElementById('dropZone');
-dropZone.addEventListener('dragover', e => {
-    e.preventDefault();
-    dropZone.classList.add('dragover');
-});
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-dropZone.addEventListener('drop', e => {
-    e.preventDefault();
-    dropZone.classList.remove('dragover');
-    document.getElementById('fileInput').files = e.dataTransfer.files;
-});

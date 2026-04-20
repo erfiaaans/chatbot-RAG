@@ -435,6 +435,13 @@ body {
   word-wrap: break-word;
 }
 
+.time {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  text-align: right;
+}
+
 .message.user .bubble {
   background: var(--user-bg);
   border: 1px solid var(--border);
