@@ -1,37 +1,38 @@
 from google import genai
 from src.config.config import settings
+from src.config.prompts import load_prompt
+
+PROMPT_TEMPLATE = load_prompt("prompts.md")
 
 
 class ContextAssembler:
+    def format_chunk(self, c: dict) -> str:
+        source = c.get("meta", {}).get("source", "-")
+        text = c.get("text", "").strip()
+
+        return f"""[Sumber: {source}]\n{text}"""
+
     def assemble(self, chunks: list[dict], question: str, history: list = []) -> str:
         try:
-            context = "\n\n".join(
-                f"[Sumber: {c.get('meta', {}).get('source', '-')}]\n{c.get('text', '')}"
-                for c in chunks
-            )
+            context = "\n\n=== CHUNK ===\n\n".join(self.format_chunk(c) for c in chunks)
 
-            history_text = ""
             if history:
                 history_text = "\n".join(
                     f"Mahasiswa: {h['question']}\nAsisten: {h['answer']}"
                     for h in history
                 )
+            else:
+                history_text = (
+                    "Belum ada riwayat percakapan. Mahasiswa baru memulai chat."
+                )
 
-            history_section = (
-                f"Riwayat Percakapan:\n{history_text}\n\n" if history_text else ""
+            history_section = history_text
+
+            return PROMPT_TEMPLATE.format(
+                history_section=history_section,
+                context=context,
+                question=question,
             )
-
-            prompt = f"""Kamu adalah asisten akademik Prodi TIF UNIPMA.
-    Jawab pertanyaan HANYA berdasarkan konteks dokumen berikut.
-    Jika informasi tidak tersedia dalam konteks, sampaikan bahwa
-    informasi tidak ditemukan dan sarankan menghubungi prodi.
-    {history_section}
-    Konteks dokumen:
-    {context}
-
-    Pertanyaan: {question}
-    Jawaban:"""
-            return prompt
 
         except Exception as e:
             raise ValueError(f"Gagal menyusun prompt: {e}") from e
@@ -42,13 +43,16 @@ class GeminiGenerator:
         self.client = genai.Client(api_key=settings.gemini_api_key)
         self.model = settings.llm_model
 
-    def generate(self, prompt: str, chunks: list, sources: list) -> dict:
-        response = self.client.model.generate_content(
-            model=self.model,
-            contents=prompt,
-            config={
-                "temperature": settings.temperature,
-                "maxOutputTokens": settings.max_output_tokens,
-            },
-        )
-        return {"answer": response.text, "sources": sources}
+    def generate(self, prompt: str, sources: list) -> dict:
+        try:
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=prompt,
+                config={
+                    "temperature": settings.temperature,
+                    "max_output_tokens": settings.max_output_tokens,
+                },
+            )
+            return {"answer": response.text, "sources": sources}
+        except Exception as e:
+            raise RuntimeError(f"Gagal generate jawaban: {e}") from e
