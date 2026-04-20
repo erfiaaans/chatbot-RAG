@@ -78,9 +78,10 @@ Ujian skripsi/tugas akhir bertujuan untuk menunjukkan tingkat
 pengesahan dan pertanggungjawaban mahasiswa atas skripsi/tugas
 akhir nya dan merupakan penilaian akhir pendidikan yang harus
 ditempuh oleh mahasiswa untuk memperoleh gelar kesarjanaannya.
+
 Adapun prosedur ujian skripsi/tugas akhir:
 
-##### 1. Sebelum Ujian
+1. Sebelum Ujian
 
 a. Mahasiswa memvalidasikan sumber pustaka penulisan skripsinya kepada dosen pembimbing I atau II. Form Validasi Sumber Pustaka Penulisan Skripsi.
 
@@ -118,7 +119,7 @@ l. Mahasiswa mengunggah bukti screenshot submit artikel pada jurnal/prosiding pa
 
 m. Bagi mahasiswa yang berhasil melakukan publikasi artikel pada Jurnal Terindeks Sinta 1 atau Sinta 2 atau pada prosiding Internasional maka dibebaskan dari Sidang Ujian Skripsi.
 
-##### 2. Saat Ujian
+2. Saat Ujian
 
 a. Mahasiswa hadir 15 menit sebelum acara ujian dimulai.
 
@@ -154,7 +155,7 @@ i. Mahasiswa yang tidak lulus (nilai D dan E) melaksanakan proses penulisan kemb
 
 j. Mahasiswa yang lulus (nilai A, B, C) dan revisi mendapatkan form C dan D.
 
-##### 2. Setelah Ujian
+3. Setelah Ujian
 
 a. Mahasiswa mengajukan revisi naskah skripsi/tugas akhir kepada dosen penguji dalam masa revisi. Mahasiswa yang mengajukan revisi setelah masa revisi berakhir, yang bersangkutan harus diuji ulang.
 

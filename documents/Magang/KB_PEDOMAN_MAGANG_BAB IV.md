@@ -11,49 +11,29 @@ Proposal magang digunakan untuk menjadi landasan kegiatan magang yang akan dilak
 3. Menunjukkan kesiapan mahasiswa untuk melaksanakan kegiatan magang
 4. Sebagai dokumen formal permohonan izin kegiatan magang dan sekaligus pembentukan Kerjasama antara Perguruan Tinggi dan Instansi
 
-Adapun sistematika penulisan proposal magang sebagai berikut :
+Adapun sistematika penulisan proposal magang sebagai berikut :  
+**Halaman Judul**  
+Berisikan judul kegiatan magang, nama mitra/instansi tempat magang dan daftar anggota kelompok peserta magang  
+**Halaman Pengesahan**  
+Berisikan pengesahan kegiatan magang yang harus disahkan oleh Koordinator Magang Program Studi dan Kepala Program Studi  
+**Kata Pengantar**  
+Kata pengantar berisi ucapan syukur, latar belakang singkat, maksud dan tujuan penulisan proposal, harapan terhadap pelaksanaan kegiatan magang, serta ucapan terimakasih terhadap beberapa pihak yang terlibat dalam kegiatan magang  
+**Daftar Isi**  
+ Berisikan daftar isi yang dibuat dengan menggunakan table of contents dengan aturan halaman pengesahan, kata pengantar dan daftar isi menggunakan penomoran romawi (i, ii, dst...) sedangkan untuk isi menggunakan angka arab (1,2,3,...)  
+**A. Pendahuluan**  
+ Pendahuluan berisikan latar belakang, permasalahan yang muncul, Batasan pembahasan masalah, dan pentingnya perencanaan kegiatan magang yang akan dilakukan  
+**B. Nama Kegiatan**  
+ Berisikan nama kegiatan magang yang akan dilakukan pada tempat magang. Nama kegiatan dapat disesuaikan dengan judul kegiatan magang yang akan dilakukan  
+**C. Tujuan Kegiatan**  
+Maksud dan tujuan magang berisikan tentang tujuan dari kegiatan magang yang akan dilakukan.
+Contoh:
+Adapun maksud dan tujuan dari Kegiatan Magang di <nama mitra> ini adalah :
 
-**Halaman Judul**
-
-Berisikan judul kegiatan magang, nama mitra/instansi tempat magang dan daftar anggota kelompok peserta magang
-
-**Halaman Pengesahan**
-
-Berisikan pengesahan kegiatan magang yang harus disahkan oleh Koordinator Magang Program Studi dan Kepala Program Studi
-
-**Kata Pengantar**
-
-Kata pengantar berisi ucapan syukur, latar belakang singkat, maksud dan tujuan penulisan proposal, harapan terhadap pelaksanaan kegiatan magang, serta ucapan terimakasih terhadap beberapa pihak yang terlibat dalam kegiatan magang
-
-**Daftar Isi**
-
-Berisikan daftar isi yang dibuat dengan menggunakan table of contents dengan aturan halaman pengesahan, kata pengantar dan daftar isi menggunakan penomoran romawi (i, ii, dst...) sedangkan untuk isi menggunakan angka arab (1,2,3,...)
-
-**A. Pendahuluan**
-
-    Pendahuluan berisikan latar belakang, permasalahan yang muncul, Batasan pembahasan masalah, dan pentingnya perencanaan kegiatan magang yang akan dilakukan
-
-**B. Nama Kegiatan**
-
-    Berisikan nama kegiatan magang yang akan dilakukan pada tempat magang. Nama kegiatan dapat disesuaikan dengan judul kegiatan magang yang akan dilakukan
-
-**C. Tujuan Kegiatan**
-
-    Maksud dan tujuan magang berisikan tentang tujuan dari kegiatan magang yang akan dilakukan.
-
-    Contoh:
-
-    Adapun maksud dan tujuan dari Kegiatan Magang di <nama mitra> ini adalah :
-
-    1. Mengamati, mengembangkan, dan menerapkan ilmu yang ada di perkuliahan dengan dunia kerja yang sesungguhnya
-
-    2. Menambah wawasan dan pengalaman kerja untuk mempersiapkan mahasiswa dalam menghadapai tantangan dunia kerja di masa yang akan datang
-
-    3. Melakukan studi lapangan dan terlibat langsung pada kegiatan Instansi
-
-    4. Mengidentifikasi permasalahan yang terdapat di instansi menggunakan teori dan ilmu yang mendukung dan menyajikannya dalam bentuk laporan Program Magang
-
-    5. Memenuhi persyaratan untuk kelengkapan kurikulum S-1 / D3 (disesuaikan strata pada masing-masing prodi di lingkup FEB, FT, FH, FIKS) di Program Studi .......<nama program studi> Fakultas .... <Fakultas Ekonomi dan Bisnis/ Fakultas Teknik/ Fakultas Hukum/ Fakultas Ilmu Kesehatan dan Sains> Universitas PGRI Madiun.
+1. Mengamati, mengembangkan, dan menerapkan ilmu yang ada di perkuliahan dengan dunia kerja yang sesungguhnya
+2. Menambah wawasan dan pengalaman kerja untuk mempersiapkan mahasiswa dalam menghadapai tantangan dunia kerja di masa yang akan datang
+3. Melakukan studi lapangan dan terlibat langsung pada kegiatan Instansi
+4. Mengidentifikasi permasalahan yang terdapat di instansi menggunakan teori dan ilmu yang mendukung dan menyajikannya dalam bentuk laporan Program Magang
+5. Memenuhi persyaratan untuk kelengkapan kurikulum S-1 / D3 (disesuaikan strata pada masing-masing prodi di lingkup FEB, FT, FH, FIKS) di Program Studi .......<nama program studi> Fakultas .... <Fakultas Ekonomi dan Bisnis/ Fakultas Teknik/ Fakultas Hukum/ Fakultas Ilmu Kesehatan dan Sains> Universitas PGRI Madiun.
 
 **D. Manfaat Magang**
 
