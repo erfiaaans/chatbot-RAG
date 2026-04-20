@@ -1,8 +1,8 @@
-from retriever import Retriever
-from generator import ContextAssembler, GeminiGenerator
-from document_loader import DocumentLoader
-from text_chunker import TextChunker
-from config import settings
+from src.core.retriever import Retriever
+from src.core.generator import ContextAssembler, GeminiGenerator
+from src.ingestion.document_loader import DocumentLoader
+from src.ingestion.text_chunker import TextChunker
+from src.config import settings
 
 
 class RAGPipeline:

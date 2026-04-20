@@ -1,5 +1,5 @@
 from sentence_transformers import SentenceTransformer  # type: ignore
-from config import settings
+from src.config import settings
 
 _model = None
 
@@ -10,7 +10,7 @@ def get_model():
         print("Loading embedding model...")
         _model = SentenceTransformer(
             settings.embedding_model,
-            cache_folder="./hf_cache",
+            cache_folder="./cache/hf_cache",
         )
         print("Embedding model berhasil di-load")
     return _model

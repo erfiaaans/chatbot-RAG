@@ -1,6 +1,6 @@
-from embedding_service import EmbeddingService
-from vector_store import VectorStore
-from config import settings
+from src.services.embedding_service import EmbeddingService
+from src.services.vector_store import VectorStore
+from src.config import settings
 
 
 class QueryEmbedder:

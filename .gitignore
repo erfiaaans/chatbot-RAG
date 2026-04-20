@@ -8,10 +8,7 @@ __pycache__/
 *.pyo
 
 # Vector database
-chroma_db/
-
-# Documents (data sumber)
-# documents/
+storage
 
 # Environment variables
 .env
@@ -22,5 +19,4 @@ chroma_db/
 # OS files
 .DS_Store
 Thumbs.db
-
-hf_cache
+cache

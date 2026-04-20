@@ -1,8 +1,8 @@
 import uuid
-from document_loader import DocumentLoader
-from text_chunker import TextChunker
-from embedding_service import EmbeddingService
-from vector_store import VectorStore
+from src.ingestion.document_loader import DocumentLoader
+from src.ingestion.text_chunker import TextChunker
+from src.services.embedding_service import EmbeddingService
+from src.services.vector_store import VectorStore
 
 
 class IngestionPipeline:

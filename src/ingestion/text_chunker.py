@@ -3,7 +3,7 @@ from typing import List
 
 from llama_index.core import Document
 from llama_index.core.node_parser import SentenceSplitter
-from config import settings
+from src.config import settings
 
 
 class TextChunker:
