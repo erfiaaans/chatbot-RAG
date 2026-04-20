@@ -35,7 +35,7 @@ async function sendMessage() {
     input.style.height = 'auto';
 
     const botId = appendMessage('bot', '');
-    const botBubble = document.querySelector(`#${botId} .bubble`);
+    const botBubble = document.getElementById(botId).querySelector('.bubble');
 
     setLoading(true);
 
@@ -95,7 +95,7 @@ async function sendMessage() {
 // ===== APPEND MESSAGE =====
 function appendMessage(role, text) {
     const messages = document.getElementById('messages');
-    const id = 'msg-' + Date.now();
+    const id = 'msg-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
 
     const div = document.createElement('div');
     div.className = `message ${role}`;
