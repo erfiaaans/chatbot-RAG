@@ -60,18 +60,28 @@ class TextChunker:
                 for sc in sub_chunks:
                     text_with_header = f"{header}\n\n{sc}" if header else sc
 
-                    docs.append(
-                        Document(
-                            id_=f"{metadata['filename']}_chunk_{chunk_id}",
-                            text=text_with_header,
-                            metadata={
-                                "source": metadata.get("filename"),
-                                "category": metadata.get("category"),
-                                "path": metadata.get("path"),
-                                "header": header,
-                            },
-                        )
+                    doc_id = f"{metadata['filename']}_chunk_{chunk_id}"
+                    doc = Document(
+                        id_=doc_id,
+                        text=text_with_header,
+                        metadata={
+                            "source": metadata.get("filename"),
+                            "category": metadata.get("category"),
+                            "path": metadata.get("path"),
+                            "header": header,
+                            "key_id": doc_id,
+                        },
                     )
+                    docs.append(doc)
+
+                    print("\n" + "-" * 80)
+                    print(f"Chunk ID : {chunk_id}")
+                    print(f"Doc ID   : {doc_id}")
+                    print(f"Header   : {header if header else '-'}")
+                    print(f"Length   : {len(sc)} chars")
+                    print("-" * 80)
+                    print(sc)
+                    print("-" * 80)
 
                     chunk_id += 1
 

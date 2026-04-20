@@ -12,14 +12,25 @@ class IngestionPipeline:
         self.embedder = EmbeddingService()
         self.store = VectorStore()
 
-    def run_documents(self, documents: list[dict]) -> dict:
+    def run_documents(
+        self,
+        documents: list[dict],
+        overwrite: bool = False,
+        doc_id: str | None = None,
+    ) -> dict:
         all_chunks = []
         all_vectors = []
 
-        doc_id = str(uuid.uuid4())
+        doc_id = doc_id or str(uuid.uuid4())
 
         for doc in documents:
+            source = doc.get("source", "")
+
+            if overwrite and source:
+                self.store.delete(doc_id=doc_id)
+
             chunks = self.chunker.chunk(text=doc["text"], metadata=doc)
+
             vectors = [self.embedder.embed(c.text) for c in chunks]
 
             all_chunks.extend(chunks)
@@ -32,9 +43,10 @@ class IngestionPipeline:
         )
         data = {
             "status": "berhasil",
+            "doc_id": doc_id,
+            "overwrite": overwrite,
             "total_files": len(documents),
             "total_chunks": len(all_chunks),
-            "doc_id": doc_id,
         }
         print(data)
         return data

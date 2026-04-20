@@ -35,6 +35,7 @@ class Retriever:
                     "category": meta.get("category", "-"),
                     "header": meta.get("header", ""),
                     "path": meta.get("path", "-"),
+                    "key_id": meta.get("key_id", "-"),
                     "score": round(1 - distance, 4),
                 }
             )

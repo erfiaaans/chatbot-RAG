@@ -52,6 +52,7 @@ class RAGPipeline:
             lines.append(f"Header   : {c['header']}")
             lines.append(f"Path     : {c['path']}")
             lines.append(f"Score    : {c['score']}")
+            lines.append(f"key_id    : {c['key_id']}")
             lines.append("Text:")
             lines.append(c["text"])
             lines.append("")
