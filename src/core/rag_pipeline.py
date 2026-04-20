@@ -58,7 +58,18 @@ class RAGPipeline:
             lines.append("Text:")
             lines.append(c.get("text", ""))
             lines.append("")
+        answer = "\n".join(lines)
 
-        sources = list({meta.get("source") for c in chunks if (meta := c.get("meta"))})
-
-        return {"answer": "\n".join(lines), "sources": sources}
+        try:
+            sources = list(
+                {meta.get("source") for c in chunks if (meta := c.get("meta"))}
+            )
+            recent = self.history[-settings.conversation_window :]
+            prompt = self.assembler.assemble(chunks, question, recent)
+            self.history.append({"question": question, "answer": "Haloo"})
+            return {"answer": prompt, "sources": sources}
+        except Exception as e:
+            return {
+                "answer": f"{str(e)}",
+                "sources": [],
+            }
