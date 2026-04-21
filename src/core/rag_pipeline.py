@@ -14,24 +14,21 @@ class RAGPipeline:
         self.chunker = TextChunker()
         self.history = []
 
-    def query(self, question: str) -> dict:
+    def rag_query(self, question: str) -> dict:
         chunks = self.retriever.retrieve(question)
         if not chunks:
             return {"answer": "Informasi tidak ditemukan dalam dokumen.", "sources": []}
+
+        sources = list({meta.get("source") for c in chunks if (meta := c.get("meta"))})
         recent = self.history[-settings.conversation_window :]
         prompt = self.assembler.assemble(chunks, question, recent)
-        result = self.generator.generate(prompt, chunks)
-        self.history.append({"question": question, "answer": result["answer"]})
-        return result
+        print(prompt)
+        result = self.generator.generate(prompt)
+        self.history.append({"question": question, "answer": result})
+        return {"answer": result, "sources": sources}
 
     def reset_history(self):
         self.history = []
-
-    # def dummy_rag_query(self, question):
-    #     return {
-    #         "answer": f"Ini jawaban dummy untuk pertanyaan: '{question}'. Sistem sedang dalam tahap pengembangan streaming chatbot.",
-    #         "sources": ["dokumen1.pdf", "panduan_skripsi.md"]
-    #     }
 
     def dummy_rag_query(self, question):
         chunks = self.retriever.retrieve(question)

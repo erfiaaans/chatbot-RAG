@@ -43,7 +43,7 @@ class GeminiGenerator:
         self.client = genai.Client(api_key=settings.gemini_api_key)
         self.model = settings.llm_model
 
-    def generate(self, prompt: str, sources: list) -> dict:
+    def generate(self, prompt: str) -> dict:
         try:
             response = self.client.models.generate_content(
                 model=self.model,
@@ -53,6 +53,6 @@ class GeminiGenerator:
                     "max_output_tokens": settings.max_output_tokens,
                 },
             )
-            return {"answer": response.text, "sources": sources}
+            return response.text  # type: ignore
         except Exception as e:
             raise RuntimeError(f"Gagal generate jawaban: {e}") from e
