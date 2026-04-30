@@ -13,7 +13,8 @@ rag = RAGPipeline()
 
 @chat_bp.route("/")
 def index():
-    return render_template("index.html")
+    # return render_template("index.html")
+    return render_template("dashboard.html")
 
 
 @chat_bp.route("/chat", methods=["POST"])
