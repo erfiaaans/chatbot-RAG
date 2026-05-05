@@ -52,14 +52,13 @@ h1 {
   content: "";
   position: absolute;
   inset: 0;
-  /* background: rgba(255,255,255,0.5); */
 }
 
 .cloud {
   position: absolute;
-  top: 20px;
+  top: 10px;
   left: 20px;
-  width: 500px;
+  width: 300px;
 
   z-index: 3;
 }
@@ -76,7 +75,7 @@ h1 {
 
 .text-wrapper {
   position: relative;
-  width: 1300px;
+  width: 1000px;
 }
 
 .text-img {
@@ -91,7 +90,6 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* color: black; */
 
   text-align: left;
   padding: 20px;
@@ -121,9 +119,9 @@ h1 {
   position: relative;
   display: inline-block;
 
-  /* width: 400px;
+  width: 400px;
   height: 350px; 
-  margin: auto; */
+  margin: auto;
 }
 
 .bubble-cloud {
@@ -147,18 +145,15 @@ h1 {
   font-size: 18px;
   font-family: "Press Start 2P", system-ui;
   line-height: 1.4;
-/* 
-  z-index: 3;
-  width: 130px; */
 }
-/* .character {
+.character {
   position: absolute;
-  bottom: 0;
-  left: 0;
+  bottom: -50px;
+  left: -200px;
 
-  width: 160px;
+  width: 800px;
   z-index: 2;
-} */
+}
 
 .bubble1 {
   bottom: 400px;
@@ -176,10 +171,10 @@ h1 {
 }
 
 .cta-button {
-  /* font-family: "Press Start 2P", system-ui; */
+  font-family: "Press Start 2P", system-ui;
   display: inline-block;
-  margin-top: 500px;
-  padding: 25px 75px;
+  margin-top: 400px;
+  padding: 25px 50px;
   border: 2px solid black;
   background: white;
   text-decoration: none;

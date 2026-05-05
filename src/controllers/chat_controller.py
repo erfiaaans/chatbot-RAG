@@ -10,13 +10,6 @@ from src.core.rag_pipeline import RAGPipeline
 chat_bp = Blueprint("chat", __name__)
 rag = RAGPipeline()
 
-
-@chat_bp.route("/")
-def index():
-    # return render_template("index.html")
-    return render_template("dashboard.html")
-
-
 @chat_bp.route("/chat", methods=["POST"])
 def chat():
     data = request.json
