@@ -10,11 +10,11 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template("dashboard.html")  # landing page
+    return render_template("landing-page.html")
 
-@app.route("/chatbot")
-def chatbot():
-    return render_template("index.html")  # halaman chat
+# @app.route("/chatbot")
+# def chatbot():
+#     return render_template("index.html")
 
 app.register_blueprint(chat_bp, url_prefix="/api")
 

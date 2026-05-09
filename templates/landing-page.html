@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Asisten AI Akademik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- <link rel="stylesheet" href="css/styles.css" /> -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+            colors: {
+              brand: {
+                50: "#eff6ff",
+                100: "#dbeafe",
+                500: "#3b82f6",
+                600: "#2563eb",
+                700: "#1d4ed8",
+                900: "#1e3a8a",
+              },
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body
+    class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col relative overflow-x-hidden"
+  >
+    <header
+      class="w-full px-6 py-4 bg-blue-600 backdrop-blur-md sticky top-0 z-40 border-b border-blue-700"
+    >
+      <div class="max-w-7xl mx-auto flex items-center">
+        <div
+          class="flex items-center gap-2 text-white font-bold text-xl tracking-tight"
+        >
+          <svg
+            class="w-8 h-8"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+            ></path>
+          </svg>
+          Chatbot Akademik — Prodi TIF UNIPMA
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-grow flex items-center w-full">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 w-full">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-center"
+        >
+          <div class="flex flex-col justify-center order-2 md:order-1">
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-100 text-brand-700 font-medium text-sm w-max mb-6"
+            >
+              <span class="relative flex h-2 w-2">
+                <span
+                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-500 opacity-75"
+                ></span>
+                <span
+                  class="relative inline-flex rounded-full h-2 w-2 bg-brand-600"
+                ></span>
+              </span>
+              Sistem AI Terintegrasi
+            </div>
+            <h1
+              class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-brand-900 leading-[1.15] tracking-tight"
+            >
+              Selamat Datang di Chatbot Akademik
+              <span class="text-brand-600">Mahasiswa TIF!</span>
+            </h1>
+            <p class="mt-6 text-lg text-slate-600 leading-relaxed max-w-xl">
+              Dapatkan informasi kegiatan akademik Teknik Informatika dengan
+              cepat melalui chatbot. Ajukan pertanyaan seperti jadwal kuliah,
+              panduan skripsi, dan informasi lainnya..
+            </p>
+
+            <div class="mt-8 flex flex-col sm:flex-row gap-4">
+              <button
+                onclick="toggleChat()"
+                class="px-8 py-3.5 rounded-xl bg-brand-600 text-white font-semibold shadow-lg shadow-brand-500/30 hover:bg-brand-700 hover:shadow-brand-500/40 transition-all duration-200 transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              >
+                Mulai Bertanya
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                class="px-8 py-3.5 rounded-xl bg-white text-brand-600 font-semibold border border-slate-200 shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 flex items-center justify-center"
+              >
+                Pelajari Fitur
+              </button>
+            </div>
+          </div>
+          <div class="order-1 md:order-2">
+            <div
+              class="bg-white rounded-2xl p-6 lg:p-8 shadow-xl shadow-brand-900/5 border border-slate-100 relative"
+            >
+              <div
+                class="absolute -top-4 -right-4 w-20 h-20 bg-brand-100 rounded-full blur-2xl opacity-60"
+              ></div>
+
+              <h2 class="text-xl font-bold text-slate-800 mb-2">
+                Topik Populer
+              </h2>
+              <p class="text-sm text-slate-500 mb-6">
+                Contoh informasi yang bisa kamu tanyakan:
+              </p>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div
+                  class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-brand-50 hover:border-brand-200 transition-colors cursor-default group"
+                >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-brand-500 shadow-sm group-hover:text-brand-600"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700"
+                    >Pedoman magang</span
+                  >
+                </div>
+                <div
+                  class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-brand-50 hover:border-brand-200 transition-colors cursor-default group"
+                >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-brand-500 shadow-sm group-hover:text-brand-600"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700"
+                    >Syarat skripsi</span
+                  >
+                </div>
+                <div
+                  class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-brand-50 hover:border-brand-200 transition-colors cursor-default group"
+                >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-brand-500 shadow-sm group-hover:text-brand-600"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700"
+                    >Jadwal mata kuliah</span
+                  >
+                </div>
+                <div
+                  class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-brand-50 hover:border-brand-200 transition-colors cursor-default group"
+                >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-brand-500 shadow-sm group-hover:text-brand-600"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700"
+                    >Kalender akademik</span
+                  >
+                </div>
+                <div
+                  class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-brand-50 hover:border-brand-200 transition-colors cursor-default group"
+                >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-brand-500 shadow-sm group-hover:text-brand-600"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700"
+                    >Persyaratan KRS</span
+                  >
+                </div>
+                <div
+                  class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-brand-50 hover:border-brand-200 transition-colors cursor-default group"
+                >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-brand-500 shadow-sm group-hover:text-brand-600"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700"
+                    >Informasi dosen</span
+                  >
+                </div>
+                <div
+                  class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-brand-50 hover:border-brand-200 transition-colors cursor-default group"
+                >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-brand-500 shadow-sm group-hover:text-brand-600"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700"
+                    >Prosedur cuti kuliah</span
+                  >
+                </div>
+                <div
+                  class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-brand-50 hover:border-brand-200 transition-colors cursor-default group"
+                >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-brand-500 shadow-sm group-hover:text-brand-600"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700"
+                    >Seminar proposal</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <button
+      id="chat-toggle-btn"
+      onclick="toggleChat()"
+      class="fixed bottom-6 right-6 lg:bottom-8 lg:right-8 w-14 h-14 bg-brand-600 text-white rounded-full shadow-xl shadow-brand-500/40 flex items-center justify-center hover:bg-brand-700 hover:scale-105 hover:shadow-2xl transition-all duration-300 z-50 focus:outline-none"
+    >
+      <svg
+        id="chat-icon-default"
+        class="w-6 h-6 transition-transform duration-300"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+        ></path>
+      </svg>
+      <svg
+        id="chat-icon-close"
+        class="w-6 h-6 absolute opacity-0 scale-50 transition-all duration-300"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        ></path>
+      </svg>
+    </button>
+    <div
+      id="chat-popup"
+      class="fixed bottom-24 right-6 lg:bottom-28 lg:right-8 w-[calc(100vw-3rem)] sm:w-[380px] bg-white rounded-2xl shadow-2xl shadow-brand-900/10 border border-slate-200 z-50 flex flex-col overflow-hidden origin-bottom-right opacity-0 scale-90 pointer-events-none"
+    >
+      <div class="bg-brand-600 px-5 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white backdrop-blur-sm"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              ></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-white font-semibold text-sm">Chatbot TIF</h3>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
+              <span class="text-brand-100 text-xs">Online</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1">
+          <button
+            onclick="toggleMaximize()"
+            class="text-brand-100 hover:text-white transition-colors focus:outline-none p-1.5 rounded-md hover:bg-white/10"
+            title="Maximize"
+          >
+            <svg
+              id="chat-icon-maximize"
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5"
+              ></path>
+            </svg>
+            <svg
+              id="chat-icon-restore"
+              class="w-4 h-4 hidden"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9V4.5M15 9h4.5M15 9l5.25-5.25M15 15v4.5M15 15h4.5M15 15l5.25 5.25"
+              ></path>
+            </svg>
+          </button>
+          <button
+            onclick="toggleChat()"
+            class="text-brand-100 hover:text-white transition-colors focus:outline-none p-1.5 rounded-md hover:bg-white/10"
+            title="Close"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div id="chat-area" class="flex flex-col h-full">
+        <!-- Messages -->
+        <div
+          id="messages"
+          class="flex-1 overflow-y-auto p-5 bg-slate-50 flex flex-col gap-4"
+        >
+          <div class="text-center">
+            <span
+              class="text-[10px] uppercase font-semibold text-slate-400 bg-white px-2 py-1 rounded-full shadow-sm"
+            >
+              Hari Ini
+            </span>
+          </div>
+
+          <!-- Welcome -->
+          <div class="flex gap-3 max-w-[85%]">
+            <div
+              class="w-8 h-8 rounded-full bg-brand-100 flex-shrink-0 flex items-center justify-center text-brand-600 mt-1"
+            >
+              🤖
+            </div>
+
+            <div
+              class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-sm text-slate-700 leading-relaxed"
+            >
+              Halo, saya siap membantu.
+            </div>
+          </div>
+        </div>
+
+        <!-- INPUT -->
+        <div class="p-4 bg-white border-t border-slate-100 flex-shrink-0">
+          <form
+            onsubmit="
+              event.preventDefault();
+              sendMessage();
+            "
+            class="flex items-end gap-2"
+          >
+            <textarea
+              id="questionInput"
+              rows="1"
+              placeholder="Ketik pertanyaanmu di sini..."
+              onkeydown="handleKey(event)"
+              oninput="autoResize(this)"
+              class="flex-grow resize-none overflow-y-auto max-h-[120px] bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm"
+            ></textarea>
+
+            <button
+              id="sendBtn"
+              type="submit"
+              class="w-11 h-11 bg-brand-600 text-white rounded-xl flex items-center justify-center"
+            >
+              ➤
+            </button>
+          </form>
+        </div>
+      </div>
+      <!-- <div
+        id="messages"
+        class="p-5 h-[360px] bg-slate-50 overflow-y-auto chat-scroll flex flex-col gap-4"
+      >
+        <div class="text-center">
+          <span
+            class="text-[10px] uppercase font-semibold text-slate-400 bg-white px-2 py-1 rounded-full shadow-sm"
+            >Hari Ini</span
+          >
+        </div>
+        <div class="flex gap-3 max-w-[85%]">
+          <div
+            class="w-8 h-8 rounded-full bg-brand-100 flex-shrink-0 flex items-center justify-center text-brand-600 mt-1"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              ></path>
+            </svg>
+          </div>
+          <div
+            class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-sm text-slate-700 leading-relaxed"
+          >
+            Halo, saya siap membantu. Silakan tanyakan seputar akademik, magang,
+            skripsi, atau jadwal kuliah.
+          </div>
+        </div>
+        <div class="p-4 bg-white border-t border-slate-100">
+          <form
+            onsubmit="
+              event.preventDefault();
+              sendMessage();
+            "
+            class="flex items-end gap-2 max-w-4xl mx-auto"
+          >
+            <textarea
+              id="questionInput"
+              rows="1"
+              placeholder="Ketik pertanyaanmu di sini..."
+              onkeydown="handleKey(event)"
+              oninput="autoResize(this)"
+              class="flex-grow resize-none overflow-y-auto max-h-[120px] bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all placeholder:text-slate-400"
+            ></textarea>
+            <button
+              id="sendBtn"
+              type="submit"
+              class="w-11 h-11 flex-shrink-0 bg-brand-600 text-white rounded-xl flex items-center justify-center hover:bg-brand-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
+            >
+              <svg
+                class="w-5 h-5 -ml-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                ></path>
+              </svg>
+            </button>
+          </form>
+        </div> -->
+      <!-- </div> -->
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
+</html>

@@ -27,17 +27,66 @@ function appendMessage(role, text) {
     const id = 'msg-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
 
     const div = document.createElement('div');
-    div.className = `message ${role}`;
+    // div.className = `message ${role}`;
+    // div.id = id;
+
+    // const avatar = role === 'user' ? '👤' : '🤖';
+
+    // div.innerHTML = `
+    //     <div class="avatar">${avatar}</div>
+    //     <div class="bubble-wrapper">
+    //         <div class="bubble">${text}</div>
+    //     </div>
+    // `;
+
+    if (role === 'user') {
+
+        div.className =
+            'flex gap-3 max-w-[85%] self-end flex-row-reverse';
+
+        div.innerHTML = `
+            <div
+                class="bg-brand-600 p-3.5 rounded-2xl rounded-tr-none shadow-sm text-sm text-white leading-relaxed"
+            >
+                ${text}
+            </div>
+        `;
+
+    }
+
+    // ===== BOT =====
+    else {
+
+        div.className = 'flex gap-3 max-w-[85%]';
+
+        div.innerHTML = `
+            <div
+                class="w-8 h-8 rounded-full bg-brand-100 flex-shrink-0 flex items-center justify-center text-brand-600 mt-1"
+            >
+                <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    ></path>
+                </svg>
+            </div>
+
+            <div
+                class="bubble bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-sm text-slate-700 leading-relaxed"
+            >
+                ${text}
+            </div>
+        `;
+    }
+
     div.id = id;
-
-    const avatar = role === 'user' ? '👤' : '🤖';
-
-    div.innerHTML = `
-        <div class="avatar">${avatar}</div>
-        <div class="bubble-wrapper">
-            <div class="bubble">${text}</div>
-        </div>
-    `;
 
     messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
@@ -51,16 +100,37 @@ function appendTyping() {
     const id = 'typing-' + Date.now();
 
     const div = document.createElement('div');
-    div.className = 'message bot';
-    div.id = id;
+    // div.className = 'message bot';
+    // div.id = id;
+
+    // div.innerHTML = `
+    //     <div class="avatar">🤖</div>
+    //     <div class="bubble">
+    //         <div class="typing"><span></span><span></span><span></span></div>
+    //     </div>
+    // `;
+
+    div.className = 'flex gap-3 max-w-[85%]';
 
     div.innerHTML = `
-        <div class="avatar">🤖</div>
-        <div class="bubble">
-            <div class="typing"><span></span><span></span><span></span></div>
+        <div
+            class="w-8 h-8 rounded-full bg-brand-100 flex-shrink-0 flex items-center justify-center text-brand-600 mt-1"
+        >
+            🤖
+        </div>
+
+        <div
+            class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100"
+        >
+            <div class="typing">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     `;
 
+    div.id = id;
     messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
 
@@ -84,7 +154,7 @@ function renderMeta(el, time, latency) {
             : `${seconds.toFixed(1)}s`;
 
     div.innerText = `${time} • ${formatted}`;
-    el.querySelector('.bubble-wrapper').appendChild(div);
+    el.querySelector('.bubble').appendChild(div);
 }
 
 // ===== SEND MESSAGE =====
@@ -107,7 +177,7 @@ async function sendMessage() {
     setLoading(true);
 
     try {
-        const res = await fetch('/chat', {
+        const res = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ question })
@@ -158,6 +228,8 @@ async function sendMessage() {
                 if (data.token) {
                     fullText += data.token;
                     botBubble.innerHTML = fullText;
+
+                    messages.scrollTop = messages.scrollHeight;
                 }
 
                 // ===== SOURCES =====
@@ -189,4 +261,172 @@ function setLoading(state) {
     isLoading = state;
     document.getElementById('sendBtn').disabled = state;
     document.getElementById('questionInput').disabled = state;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.getElementById("hamburger");
+    const navMenu = document.getElementById("navMenu");
+
+    if (hamburger && navMenu) {
+        hamburger.addEventListener("click", function () {
+            navMenu.classList.toggle("active");
+        });
+    }
+});
+
+// ===============================
+// CHAT POPUP
+// ===============================
+
+const chatPopup = document.getElementById("chat-popup");
+const chatArea = document.getElementById("chat-area");
+
+const iconDefault = document.getElementById("chat-icon-default");
+const iconClose = document.getElementById("chat-icon-close");
+
+const iconMaximize = document.getElementById("chat-icon-maximize");
+const iconRestore = document.getElementById("chat-icon-restore");
+
+let isChatOpen = false;
+let isMaximized = false;
+
+// ===============================
+// TOGGLE CHAT
+// ===============================
+
+function toggleChat() {
+    isChatOpen = !isChatOpen;
+
+    if (isChatOpen) {
+
+        chatPopup.classList.remove(
+            "opacity-0",
+            "scale-90",
+            "pointer-events-none"
+        );
+
+        chatPopup.classList.add(
+            "opacity-100",
+            "scale-100",
+            "pointer-events-auto"
+        );
+
+        iconDefault.classList.add(
+            "opacity-0",
+            "scale-50",
+            "rotate-90"
+        );
+
+        iconClose.classList.remove(
+            "opacity-0",
+            "scale-50"
+        );
+
+        iconClose.classList.add(
+            "opacity-100",
+            "scale-100",
+            "rotate-90"
+        );
+
+    } else {
+
+        if (isMaximized) {
+            toggleMaximize();
+        }
+
+        chatPopup.classList.remove(
+            "opacity-100",
+            "scale-100",
+            "pointer-events-auto"
+        );
+
+        chatPopup.classList.add(
+            "opacity-0",
+            "scale-90",
+            "pointer-events-none"
+        );
+
+        iconDefault.classList.remove(
+            "opacity-0",
+            "scale-50",
+            "rotate-90"
+        );
+
+        iconClose.classList.remove(
+            "opacity-100",
+            "scale-100",
+            "rotate-90"
+        );
+
+        iconClose.classList.add(
+            "opacity-0",
+            "scale-50"
+        );
+    }
+}
+
+// ===============================
+// MAXIMIZE CHAT
+// ===============================
+
+function toggleMaximize() {
+
+    isMaximized = !isMaximized;
+
+    if (isMaximized) {
+
+        chatPopup.classList.remove(
+            "bottom-24",
+            "right-6",
+            "lg:bottom-28",
+            "lg:right-8",
+            "w-[calc(100vw-3rem)]",
+            "sm:w-[380px]",
+            "rounded-2xl"
+        );
+
+        chatPopup.classList.add(
+            "bottom-0",
+            "right-0",
+            "w-full",
+            "h-[100dvh]",
+            "rounded-none"
+        );
+
+        chatArea.classList.remove("h-[360px]");
+        chatArea.classList.add("flex-grow");
+
+        iconMaximize.classList.add("hidden");
+        iconRestore.classList.remove("hidden");
+
+        document.body.style.overflow = "hidden";
+
+    } else {
+
+        chatPopup.classList.add(
+            "bottom-24",
+            "right-6",
+            "lg:bottom-28",
+            "lg:right-8",
+            "w-[calc(100vw-3rem)]",
+            "sm:w-[380px]",
+            "rounded-2xl"
+        );
+
+        chatPopup.classList.remove(
+            "bottom-0",
+            "right-0",
+            "w-full",
+            "h-[100dvh]",
+            "rounded-none"
+        );
+
+        chatArea.classList.add("h-[360px]");
+        chatArea.classList.remove("flex-grow");
+
+        iconMaximize.classList.remove("hidden");
+        iconRestore.classList.add("hidden");
+
+        document.body.style.overflow = "";
+    }
 }

@@ -26,7 +26,15 @@
   </head>
   <body>
     <header class="navbar">
-      <div class="nav-menu">
+      <!-- HAMBURGER -->
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <!-- MENU -->
+      <div class="nav-menu" id="navMenu">
         <a href="#">Cara Penggunaan</a>
         <a href="#">Pengaduan</a>
         <a href="/chatbot" class="btn-chat">Chatbot</a>
@@ -48,19 +56,6 @@
             src="{{ url_for('static', filename='images/text.png') }}"
             class="text-img"
           />
-          <!-- <div class="text-content">
-            <h1>
-              Halo <br />
-              Mahasiswa <br />
-              TIF! <br />
-            </h1>
-            <p>
-              Selamat datang di Chatbot Akademik. <br />
-              Silakan ajukan pertanyaan terkait kegiatan akademik <br />
-              seperti jadwal kuliah, panduan skripsi, pengisian KRS, <br />
-              dan informasi lainnya.
-            </p>
-          </div> -->
         </div>
       </div>
 
@@ -71,37 +66,10 @@
             src="{{ url_for('static', filename='images/right.png') }}"
             class="character"
           />
-          <!-- <div class="bubble-cloud bubble1">
-            <img
-              src="{{ url_for('static', filename='images/bubble-cloud.png') }}"
-            />
-            <span
-              >Syarat <br />
-              Skripsi</span
-            >
-          </div>
-          <div class="bubble-cloud bubble2">
-            <img
-              src="{{ url_for('static', filename='images/bubble-cloud.png') }}"
-            />
-            <span
-              >Pedoman <br />
-              Magang</span
-            >
-          </div>
-          <div class="bubble-cloud bubble3">
-            <img
-              src="{{ url_for('static', filename='images/bubble-cloud.png') }}"
-            />
-            <span
-              >Jadwal <br />
-              Mata <br />
-              Kuliah</span
-            >
-          </div> -->
           <a href="/chatbot" class="cta-button">Yuk Tanya Chatbot!</a>
         </div>
       </div>
     </section>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>
