@@ -27,17 +27,6 @@ function appendMessage(role, text) {
     const id = 'msg-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
 
     const div = document.createElement('div');
-    // div.className = `message ${role}`;
-    // div.id = id;
-
-    // const avatar = role === 'user' ? '👤' : '🤖';
-
-    // div.innerHTML = `
-    //     <div class="avatar">${avatar}</div>
-    //     <div class="bubble-wrapper">
-    //         <div class="bubble">${text}</div>
-    //     </div>
-    // `;
 
     if (role === 'user') {
 
@@ -100,15 +89,6 @@ function appendTyping() {
     const id = 'typing-' + Date.now();
 
     const div = document.createElement('div');
-    // div.className = 'message bot';
-    // div.id = id;
-
-    // div.innerHTML = `
-    //     <div class="avatar">🤖</div>
-    //     <div class="bubble">
-    //         <div class="typing"><span></span><span></span><span></span></div>
-    //     </div>
-    // `;
 
     div.className = 'flex gap-3 max-w-[85%]';
 
@@ -229,6 +209,7 @@ async function sendMessage() {
                     fullText += data.token;
                     botBubble.innerHTML = fullText;
 
+                    const messages = document.getElementById('messages');
                     messages.scrollTop = messages.scrollHeight;
                 }
 
@@ -256,7 +237,6 @@ async function sendMessage() {
     }
 }
 
-// ===== LOADING =====
 function setLoading(state) {
     isLoading = state;
     document.getElementById('sendBtn').disabled = state;
@@ -269,14 +249,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (hamburger && navMenu) {
         hamburger.addEventListener("click", function () {
-            navMenu.classList.toggle("active");
+            navMenu.classList.toggle("hidden");
         });
     }
 });
-
-// ===============================
-// CHAT POPUP
-// ===============================
 
 const chatPopup = document.getElementById("chat-popup");
 const chatArea = document.getElementById("chat-area");
@@ -289,10 +265,6 @@ const iconRestore = document.getElementById("chat-icon-restore");
 
 let isChatOpen = false;
 let isMaximized = false;
-
-// ===============================
-// TOGGLE CHAT
-// ===============================
 
 function toggleChat() {
     isChatOpen = !isChatOpen;
@@ -365,10 +337,6 @@ function toggleChat() {
     }
 }
 
-// ===============================
-// MAXIMIZE CHAT
-// ===============================
-
 function toggleMaximize() {
 
     isMaximized = !isMaximized;
@@ -382,7 +350,9 @@ function toggleMaximize() {
             "lg:right-8",
             "w-[calc(100vw-3rem)]",
             "sm:w-[380px]",
-            "rounded-2xl"
+            "rounded-2xl",
+            "h-[600px]",
+            "max-h-[80vh]"
         );
 
         chatPopup.classList.add(
@@ -392,9 +362,6 @@ function toggleMaximize() {
             "h-[100dvh]",
             "rounded-none"
         );
-
-        chatArea.classList.remove("h-[360px]");
-        chatArea.classList.add("flex-grow");
 
         iconMaximize.classList.add("hidden");
         iconRestore.classList.remove("hidden");
@@ -410,7 +377,9 @@ function toggleMaximize() {
             "lg:right-8",
             "w-[calc(100vw-3rem)]",
             "sm:w-[380px]",
-            "rounded-2xl"
+            "rounded-2xl",
+            "h-[600px]",
+            "max-h-[80vh]"
         );
 
         chatPopup.classList.remove(
@@ -420,9 +389,6 @@ function toggleMaximize() {
             "h-[100dvh]",
             "rounded-none"
         );
-
-        chatArea.classList.add("h-[360px]");
-        chatArea.classList.remove("flex-grow");
 
         iconMaximize.classList.remove("hidden");
         iconRestore.classList.add("hidden");
