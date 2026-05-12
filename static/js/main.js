@@ -396,3 +396,32 @@ function toggleMaximize() {
         document.body.style.overflow = "";
     }
 }
+
+function goToChat(topic) {
+    const input = document.getElementById("questionInput");
+
+    if (!input) return;
+    const chatPopup = document.getElementById("chat-popup");
+
+    chatPopup.classList.remove(
+        "opacity-0",
+        "scale-90",
+        "pointer-events-none"
+    );
+
+    chatPopup.classList.add(
+        "opacity-100",
+        "scale-100"
+    );
+    document
+        .getElementById("chat-icon-default")
+        ?.classList.add("opacity-0", "scale-50");
+
+    document
+        .getElementById("chat-icon-close")
+        ?.classList.remove("opacity-0", "scale-50");
+
+    input.value = topic;
+    autoResize(input);
+    sendMessage();
+}

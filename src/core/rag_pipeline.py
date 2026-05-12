@@ -4,6 +4,8 @@ from src.ingestion.document_loader import DocumentLoader
 from src.ingestion.text_chunker import TextChunker
 from src.config.config import settings
 
+import re
+
 
 class RAGPipeline:
     def __init__(self):
@@ -13,6 +15,21 @@ class RAGPipeline:
         self.loader = DocumentLoader()
         self.chunker = TextChunker()
         self.history = []
+        
+    def clean_response(self, text: str) -> str:
+        """
+        Membersihkan format jawaban AI agar lebih rapi
+        """
+
+        if not text:
+            return "Informasi tidak ditemukan dalam dokumen."
+
+        text = text.strip()
+        text = text.replace("```", "")
+        text = re.sub(r"\n{3,}", "\n\n", text)
+        text = re.sub(r" +", " ", text)
+
+        return text
 
     def rag_query(self, question: str) -> dict:
         chunks = self.retriever.retrieve(question)

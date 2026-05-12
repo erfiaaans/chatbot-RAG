@@ -26,7 +26,8 @@ def chat():
             time.sleep(random.uniform(0.2, 0.6))
             yield f"data: {json.dumps({'meta': {'time': start_time}}, ensure_ascii=False)}\n\n"
 
-            result = rag.dummy_rag_query(question)
+            # result = rag.dummy_rag_query(question)
+            result = rag.rag_query(question)
             answer = result["answer"]
             sources = result.get("sources", [])
 
