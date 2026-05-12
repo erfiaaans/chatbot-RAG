@@ -462,6 +462,25 @@
         </div>
         <div class="flex items-center gap-1">
           <button
+            onclick="resetChat()"
+            class="text-brand-100 hover:text-white transition-colors focus:outline-none p-1.5 rounded-md hover:bg-white/10"
+            title="Hapus Chat"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 7L5 7M10 11V17M14 11V17M6 7L7 19C7.1 20 7.9 21 9 21H15C16.1 21 16.9 20 17 19L18 7M9 7V4C9 3.4 9.4 3 10 3H14C14.6 3 15 3.4 15 4V7"
+              ></path>
+            </svg>
+          </button>
+          <button
             onclick="toggleMaximize()"
             class="text-brand-100 hover:text-white transition-colors focus:outline-none p-1.5 rounded-md hover:bg-white/10"
             title="Maximize"

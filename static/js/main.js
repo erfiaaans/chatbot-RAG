@@ -425,3 +425,37 @@ function goToChat(topic) {
     autoResize(input);
     sendMessage();
 }
+async function resetChat() {
+    try {
+        await fetch("/api/reset", {
+            method: "POST",
+        });
+        const messages = document.getElementById("messages");
+
+        messages.innerHTML = `
+      <div class="text-center">
+        <span
+          class="text-[10px] uppercase font-semibold text-slate-400 bg-white px-2 py-1 rounded-full shadow-sm"
+        >
+          Hari Ini
+        </span>
+      </div>
+
+      <div class="flex gap-3 max-w-[85%]">
+        <div
+          class="w-8 h-8 rounded-full bg-brand-100 flex-shrink-0 flex items-center justify-center text-brand-600 mt-1"
+        >
+          🤖
+        </div>
+
+        <div
+          class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-sm text-slate-700 leading-relaxed"
+        >
+          Halo, saya siap membantu. Silahkan ajukan pertanyaan akademik program studi Teknik Informatika.
+        </div>
+      </div>
+    `;
+    } catch (error) {
+        console.error("Reset gagal:", error);
+    }
+}
