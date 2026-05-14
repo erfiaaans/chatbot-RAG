@@ -145,7 +145,9 @@ b. Kegiatan pertukaran mahasiswa dapat dikonversi dengan jumlah sks sesuai denga
 
    b. Dokumentasi kegiatan (foto dan video)
 
-   c. Sertifikat dari industri/ mitra d. Produk inovasi yang diberikan ke mitra/industri (jika ada)
+   c. Sertifikat dari industri/ mitra
+
+   d. Produk inovasi yang diberikan ke mitra/industri (jika ada)
 
 3. Mengajar
 

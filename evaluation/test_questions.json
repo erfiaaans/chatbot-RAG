@@ -1,0 +1,252 @@
+[
+{
+    "question": "Apa saja yang harus dijabarkan pada latar belakang masalah?",
+    "ground_truth": "Latar Belakang Masalah menjelaskan gambaran permasalahan dan alasan pemilihan permasalahan, mengapa tertarik untuk mengambil topik ini. Penulisan latar belakang masalah harus mencangkup unsur what (apa), who (siapa), when (kapan), where (di mana), why (mengapa), dan how (bagaimana) (5W+ H)."
+  },
+  {
+    "question": "Bagaimana prosedur pengajuan usulan skripsi/tugas akhir?",
+    "ground_truth": "Pengajuan usulan dimulai dengan usulan judul skripsi/tugas akhir. Usulan dikonsultasikan kepada pembimbing. Setelah mendapatkan rekomendasi pembimbing, judul diajukan ke program studi untuk menghindari kesamaan judul dari yang pernah ada."
+  },
+  {
+    "question": "Apa yang harus dijelaskan pada metode pengembangan sistem?",
+    "ground_truth": "Mendeskripsikan suatu proses pengembangan sistem yang formal dan presisi yang mendefinisikan serangkaian aktivitas, metode, best practices dan tool yang terautomasi bagi para pengembangdan manager proyek dalam rangka mengembangkan dan merawat sebagai keseluruhan sistem informasi atau software. Metode pengembangan sistem dapat mengacu pada salah satu metode berikut: Model Waterfall, Model Prototyping, Model RAD (Rapid Application Development), Model Spiral, Object Oriented Technology, Metode End-user Development, dll."
+  },
+  {
+    "question": "Apa saja isi dari analisis sistem pada bab 4 skripsi?",
+    "ground_truth": "Bagian ini berisi seluruh analisis kebutuhan pengembangan perangkat lunak yang dikembangkan. Di bagian analisis dijelaskan seluruh kebutuhan (requirements) baik fungsional maupun non-fungsional yang harus dipenuhi oleh perangkat lunak. Setiap kebutuhan harus diberikan identifier untuk memudahkan pelacakan (tracking). Analisis juga dilengkapi dengan pemodelannya sesuai dengan metode yang digunakan (terstruktur atau berorientasi objek). Jika menggunakan metode terstruktur maka yang harus dijelaskan adalah pemodelan proses dengan DFD (Data Flow Diagram) dan pemodelan data dengan ERD serta Kamus Data. Jika metode berorientasi objek yang digunakan maka yang harus dijelaskan adalah pemodelan dengan use case diagram dan deskripsi dari use-casenya. Jika dalam metode yang digunakan terdapat rumus matematika maka wajib menyertakan perhitungan dengan data sample."
+  },
+  {
+    "question": "Apa saja isi dari Kajian Teoritis?",
+    "ground_truth": "Kajian Teoritis berisi tentang teori-teori yang berkaitan dengan topik penelitian. Kajian teoritis dapat bersumber dari berbagai sumber yang yang dapat dipertanggungjawabkan, misalnya: buku, jurnal penelitian, pendapat orang lain yang telah dipublikasikan, dll."
+  },
+  {
+    "question": "Bagaimana penulisan rujukan kutipan yang telah dikutip di suatu sumber?",
+    "ground_truth": "Kutipan yang diambil dari naskah yang merupakan kutipan dari suatu sumber lain, baik secara langsung maupun tidak langsung, dirujuk dengan cara menyebutkan nama penulis asli dan nama pengutip pertama serta tahun kutipan dan nomor halamannya. Cara merujuk semacam ini hanya dibolehkan jika sumber asli benar-benar tidak didapatkan, dan harus dianggap sebagai keadaan darurat. Contoh: Laudon (dalam Riyanto, 2020:23) yang mendefinisikan sistem informasi: Secara teknis sebagai sesuatu rangkaian yang komponen-komponennya saling terkait yang mengumpulkan (dan mengambil kembali), memproses, menyimpan dan mendistribusikan informasi untuk mendukung pengambilan keputusan dan mengendalikan perusahaan."
+  },
+  {
+    "question": "Bagaimana ketentuan jumlah referensi skripsi dalam daftar pustaka?",
+    "ground_truth": "1. Daftar Pustaka harus memenuhi jumlah minimal referensi sebagai berikut : 5 Buku Referensi, 15 Referensi Jurnal/Proseding Nasional dan 5 Jurnal/Proseding Internasional. 2. Daftar pustaka harus ditulis dengan format APA Style. 3. Daftar pustaka ditulis dengan menggunakan aplikasi Sitasi seperti Mendeley, EndNote, Zatero dan lainnya."
+  },
+  {
+    "question": "Bagaimana sistematika penulisan artikel ilmiah",
+    "ground_truth": "1. Judul (Maksimum 12 kata). 2. Identitas Penulis. 3. Abstrak Bahasa Indonesia dan Bahasa Inggris (250 Kata). 4. Keywords (3-5 kata). 5. PENDAHULUAN. 6. METODE. 7. HASIL. 8. PEMBAHASAN. 9. SIMPULAN. 10. REFERENSI"
+  },
+  {
+    "question": "Bagaimana tata ketik pada skripsi?",
+    "ground_truth": "a. Pengetikan dilakukan pada satu halaman, tidak bolak-balik. b. Ukuran spasi ganda atau dua spasi, kecuali kutipan langsung yang lebih dari 40 kata dan abstrak. c. Ruang ketik dan jarak tepi/margin: 4 cm dari tepi atas dan kiri, 3 cm dari tepi bawah dan kanan"
+  },
+  {
+    "question": "Bagaimana cara menuliskan penomoran halaman pada skripsi?",
+    "ground_truth": "Halaman pada bagian awal diberi nomor dengan angka Romawi kecil, seperti: i, ii, iii, iv, dan seterusnya. Penulisan nomor halaman ini pada bagian tengah bawah. Nomor halaman pada bagian inti dan bagian akhir menggunakan huruf Arab pada bagian kanan atas, kecuali pada halaman judul bab, daftar pustaka, dan lampiran ditulis pada bagian tengah bawah."
+  },
+
+
+  {
+    "question": "Apa jadwal hari senin di ruang A-302",
+    "ground_truth": " Pada Jadwal Perkuliahan Teknik Informatika Semester Genap 2025/2026 hari Senin di Ruang A-302, jam 07.30-10.00 (jam ke-1 s.d. 3), terdapat mata kuliah RPL untuk kelas 6B yang diajar oleh Bu Dani. Pada Jadwal Perkuliahan Teknik Informatika Semester Genap 2025/2026 hari Senin di Ruang A-302, jam 10.00-12.30 (jam ke-4 s.d. 6), terdapat mata kuliah RPL untuk kelas 6C yang diajar oleh Bu Dani. Pada Jadwal Perkuliahan Teknik Informatika Semester Genap 2025/2026 hari Senin di Ruang A-302, jam 13.00-15.30 (jam ke-7 s.d. 9), terdapat mata kuliah Metode Numerik untuk kelas 4C yang diajar oleh Bu Erny."
+  },
+  {
+    "question": "Mata kuliah apa yang diajar Bu Dani di Ruang A-302 pada hari Senin jam 07.30-10.00?",
+    "ground_truth": "Pada hari Senin di Ruang A-302 jam 07.30-10.00 terdapat mata kuliah RPL untuk kelas 6B yang diajar oleh Bu Dani."
+  },
+  {
+    "question": "Siapa dosen pengampu mata kuliah Technopreneur kelas 8C pada hari Senin?",
+    "ground_truth": "Mata kuliah Technopreneur kelas 8C pada hari Senin diajar oleh Pak Slamet."
+  },
+  {
+    "question": "Kapan jadwal mata kuliah AI Lanjut kelas 6D di LAB MULTIMEDIA?",
+    "ground_truth": "AI Lanjut kelas 6D dijadwalkan pada hari Selasa di Ruang LAB MULTIMEDIA jam 10.00-12.30."
+  },
+  {
+    "question": "Di ruang mana kelas 4E mengikuti mata kuliah IMK pada hari Selasa?",
+    "ground_truth": "Kelas 4E mengikuti mata kuliah IMK pada hari Selasa di Ruang C-403."
+  },
+  {
+    "question": "Apa mata kuliah yang berlangsung di Ruang LAB-TIF hari Rabu jam 16.00-17.40?",
+    "ground_truth": "Pada hari Rabu jam 16.00-17.40 di Ruang LAB-TIF terdapat mata kuliah Basdat Dasar untuk kelas 2A yang diajar oleh Bu Pratiwi."
+  },
+  {
+    "question": "Siapa yang mengajar mata kuliah Multimedia Cerdas kelas 6C?",
+    "ground_truth": "Mata kuliah Multimedia Cerdas kelas 6C diajar oleh Pak Asyhari."
+  },
+  {
+    "question": "Jam berapa mata kuliah Prak. AI Lanjut kelas 6C dilaksanakan pada hari Jumat?",
+    "ground_truth": "Prak. AI Lanjut kelas 6C pada hari Jumat dilaksanakan jam 12.30-13.50 di Ruang A-318 (Lab. Kom 3)."
+  },
+  {
+    "question": "Kelas berapa yang mendapat mata kuliah Rangkaian Digital di Ruang T.402 pada hari Senin?",
+    "ground_truth": "Pada hari Senin di Ruang T.402 terdapat mata kuliah Rangkaian Digital untuk kelas 4B."
+  },
+  {
+    "question": "Siapa dosen pengampu mata kuliah Pengujian PL kelas 6A pada hari Selasa malam?",
+    "ground_truth": "Mata kuliah Pengujian PL kelas 6A pada hari Selasa malam diajar oleh Pak Puguh."
+  },
+
+
+  {
+    "question": "Kapan jadwal pembayaran UKT semester gasal tahun akademik 2025/2026?",
+    "ground_truth": "Pembayaran UKT semester gasal tahun akademik 2025/2026 dilaksanakan pada 18 Agustus 2025 – 31 Agustus 2025."
+  },
+  {
+    "question": "Berapa batas akhir checkpoint pelaporan akademik semester gasal?",
+    "ground_truth": "Batas akhir checkpoint atau pelaporan akademik semester gasal adalah 30 Oktober 2025."
+  },
+  {
+    "question": "Kapan kegiatan PKKMB S1 dilaksanakan di UNIPMA tahun akademik 2025/2026?",
+    "ground_truth": "PKKMB S1 dilaksanakan pada 01 September 2025 – 09 September 2025."
+  },
+  {
+    "question": "Jadwal UTS semester gasal UNIPMA 2025/2026 kapan?",
+    "ground_truth": "UTS semester gasal UNIPMA 2025/2026 berlangsung pada 04 November 2025 – 11 November 2025."
+  },
+  {
+    "question": "Sampai kapan batas upload nilai semester gasal?",
+    "ground_truth": "Batas upload nilai semester gasal adalah 17 Januari 2026."
+  },
+  {
+    "question": "Kapan pelaksanaan KKN pada semester genap tahun akademik 2025/2026?",
+    "ground_truth": "KKN semester genap tahun akademik 2025/2026 dilaksanakan pada 01 Maret 2026 – 30 April 2026."
+  },
+  {
+    "question": "Kapan masa bimbingan skripsi, tesis, dan TA pada semester genap?",
+    "ground_truth": "Masa bimbingan skripsi, tesis, dan TA semester genap berlangsung pada 01 Maret 2026 – 10 Juli 2026."
+  },
+  {
+    "question": "Tanggal berapa pelaksanaan UAS semester genap?",
+    "ground_truth": "UAS semester genap dilaksanakan pada 15 Juli 2026 – 29 Juli 2026."
+  },
+  {
+    "question": "Kapan batas pendaftaran yudisium semester genap?",
+    "ground_truth": "Batas pendaftaran yudisium semester genap adalah 09 Agustus 2026."
+  },
+  {
+    "question": "Wisuda semester gasal dilaksanakan kapan?",
+    "ground_truth": "Wisuda semester gasal dilaksanakan pada minggu ke-4 bulan April."
+  },
+
+
+  {
+    "question": "Berapa jumlah SKS mata kuliah Dasar Algoritma pada Semester 1?",
+    "ground_truth": "Mata kuliah Dasar Algoritma pada Semester 1 memiliki bobot 3 SKS."
+  },
+  {
+    "question": "Mata kuliah apa saja yang termasuk kategori Sistem Cerdas pada Semester 5?",
+    "ground_truth": "Pada Semester 5, mata kuliah kategori Sistem Cerdas meliputi Sistem Pakar, Sistem Pendukung Keputusan, dan Kecerdasan Buatan."
+  },
+  {
+    "question": "Kapan mahasiswa Teknik Informatika menempuh mata kuliah Rekayasa Perangkat Lunak?",
+    "ground_truth": "Mata kuliah Rekayasa Perangkat Lunak ditempuh pada Semester 6."
+  },
+  {
+    "question": "Apa kategori CPL untuk mata kuliah Multimedia 3D Modelling?",
+    "ground_truth": "Multimedia 3D Modelling termasuk dalam kategori Multimedia."
+  },
+  {
+    "question": "Berapa SKS mata kuliah Kuliah Kerja Nyata (KKN)?",
+    "ground_truth": "Kuliah Kerja Nyata (KKN) memiliki bobot 4 SKS."
+  },
+  {
+    "question": "Mata kuliah apa yang dipelajari pada Semester 4 terkait jaringan komputer?",
+    "ground_truth": "Pada Semester 4 terdapat mata kuliah Jaringan Komputer dan Praktikum Jaringan Komputer."
+  },
+  {
+    "question": "Apa saja mata kuliah pilihan pada Semester 7?",
+    "ground_truth": "Mata kuliah pilihan pada Semester 7 adalah Data Mining, Keamanan Data, dan E-Commerce."
+  },
+  {
+    "question": "Berapa SKS mata kuliah Skripsi pada Semester 8?",
+    "ground_truth": "Mata kuliah Skripsi pada Semester 8 memiliki bobot 6 SKS."
+  },
+  {
+    "question": "Mata kuliah Pemrograman Web Fullstack termasuk kategori apa?",
+    "ground_truth": "Pemrograman Web Fullstack termasuk kategori Algoritma dan Pemrograman."
+  },
+  {
+    "question": "Apa mata kuliah Semester 2 yang termasuk kategori Multimedia?",
+    "ground_truth": "Pada Semester 2, mata kuliah yang termasuk kategori Multimedia adalah Desain Grafis."
+  },
+
+
+  {
+    "question": "Bagaimana ketentuan untuk melakukan perpanjangan studi?",
+    "ground_truth": "1. Perpanjangan masa studi program strata 1 hanya diberikan 1 (satu) kali dengan batas waktu maksimal 2 (dua) semester. 2. Mahasiswa yang berhak mendapatkan perpanjangan masa studi mahasiswa program strata 1 yang belum dapat menyelesaikan studi dalam waktu 14 (empat belas) semester; 3. Mahasiswa yang tidak sedang mengambil cuti Akademik atau tidak aktif. 4. Mahasiswa yang sedang menyelesaikan penulisan skripsi."
+  },
+  {
+    "question": "Apa saja syarat mengikuti program KKN Tematik?",
+    "ground_truth": "a. Mahasiswa aktif dari program studi S1 di Universitas PGRI Madiun. b. Minimal telah menyelesaikan mata kuliah hingga semester 6 (enam). c. Memperoleh surat rekomendasi dari kaprodi untuk mengikuti kegiatan KKN Tematik. d. Berkomitmen untuk sanggup-sungguh mengikuti program KKN Tematik."
+  },
+  {
+    "question": "Apa saja ketentuan pelaksanaan penyusunan skripsi?",
+    "ground_truth": "a. Pada akhir masa studi, mahasiswa menyusun skripsi dengan bobot 6 (enam) SKS sesuai dengan ketentuan kurikulum Program Studi. b. Penyusunan skripsi atau tugas akhir dapat dimulai apabila mahasiswa yang bersangkutan telah menyelesaikan minimal 120 SKS. c. Penulisan skripsi dilakukan selama 1 semester dan harus diprogramkan pada waktu herregistrasi semester 8."
+  },
+  {
+    "question": "Apa saja syarat wajib kelulusan mahasiswa?",
+    "ground_truth": "1. Telah menempuh ujian skripsi dan menyelesaikan revisi skripsi. 2. Telah menempuh jumlah SKS yang ditetapkan dari masing-masing prodi. 3. Telah melakukan publikasi ilmiah di jurnal nasional atau prosiding. 4. Memiliki sertifikat kompetensi tingkat nasional atau internasional sesuai bidang keilmuannya. 5. Telah menyelesaikan semua administrasi keuangan"
+  },
+  {
+    "question": "Apa saja persyaratan umum yang harus dipenuhi oleh mahasiswa untuk mengikuti kegiatan Pembelajaran Luar Kampus (PLK)?",
+    "ground_truth": "1. Mahasiswa aktif yang terdaftar pada PDDikti. 2. Memiliki rekomendasi dari ketua program studi/dosen pendamping akademik. 3. Membuat surat pernyataan komitmen melaksanakan program PLK hingga selesai sesuai dengan ketentuan."
+  },
+  {
+    "question": "Bagaimana mekanisme mahasiswa untuk melakukan pertukaran pelajar antar Program Studi pada Perguruan Tinggi yang berbeda?",
+    "ground_truth": "Mendapatkan persetujuan Dosen Pembimbing Akademik (DPA) dan mengikuti program kegiatan pembelajaran dalam program studi lain pada perguruan tinggi yang berbeda sesuai dengan ketentuan pedoman akademik yang dimiliki perguruan tinggi serta terdaftar sebagai peserta mata kuliah di program studi yang dituju pada perguruan tinggi lain."
+  },
+  {
+    "question": "Apa saja syarat mengikuti magang? ",
+    "ground_truth": "a. Mahasiswa aktif dari program studi S1 Fakultas Teknik Universitas PGRI Madiun. b. Minimum telah menyelesaikan mata kuliah di semester 5 (lima). c. Memiliki Indeks Prestasi Kumulatif (IPK) minimum 3 dari skala 4"
+  },
+  {
+    "question": "Bagaimana cara registrasi dan KRS untuk mahasiswa lama?",
+    "ground_truth": "a. Mahasiswa konsultasi dengan penasehat akademik atau pembimbing akademik (PA) untuk memprogram matakuliah dalam Kartu Rencana Studi (KRS). b. Setelah penyusunan KRS selesai, mahasiswa melakukan pengisian KRS secara online melalui SIM. c. Mahasiswa membayar biaya pendidikan ke bank yang telah ditunjuk oleh Universitas PGRI Madiun"
+  },
+  {
+    "question": "Apa saja syarat yang dibawa untuk pengajuan permohonan pembuatan SKL?",
+    "ground_truth": "a. Hasil KHS/transkrip nilai. b. Bukti penyerahan skripsi di perpustakaan pusat. c. Bukti/berkas lulus ujian skripsi. d. Bukti bebas administrasi keuangan. e. Pasfoto berwarna (3x4 cm) sebanyak 2 lembar"
+  },
+  {
+    "question": "Apa saja yang harus dilampirkan untuk mengajukan permohonan perpanjangan studi secara tertulis kepada Dekan?",
+    "ground_truth": "a. Rekomendasi Dosen pembimbing Akademik; b. Rekomendasi Ketua Program Studi; c. Pernyataan kesanggupan untuk menyelesaikan studi selama masa perpanjangan studi;"
+  },
+  
+  
+  {
+    "question": "Apa saja lampiran pada laporan magang?",
+    "ground_truth":"1. Lembar Catatan Harian. 2. Lembar Penilaian Pembimbing Lapangan (dari mitra/instansi). 3. Lampiran Dokumentasi. 4. Berita Acara Penyerahan Magang. 5. Berita Acara Penarikan Magang. 6. Lembar Monitoring DPL"
+  },
+  {
+    "question": "Bagaimana cara mencantumkan kutipan yang tidak ada nama penulisnya?",
+    "ground_truth":"Jika tidak ada nama penulis, dalam sumber kutipan dapat dituliskan 1 atau 2 kata pertama dari judul dan tahun. Kutipan dari artikel atau bab, judul ditulis dalam huruf tegak dan diberi tanda petik. Kutipan dari buku, brosur, laporan atau terbitan berkala (majalah/surat kabar), judul ditulis dalam huruf miring. Contoh: Aplikasi dari accounting system yang berbasis sistem database dengan menggunakan teknologi computer (“Komputerisasi”, 2020)."
+  },
+  {
+    "question": "Apa saja persyaratan umum yang wajib dipenuhi oleh mahasiswa sebagai calon peserta magang?",
+    "ground_truth":"a. Peserta magang adalah mahasiswa UNIPMA yang terdaftar aktif pada PD DIKTI. b. Telah lulus minimal 100 SKS untuk jenjang S1 dan 79 SKS untuk jenjang D3. c. Memiliki IPK minimal 3.00. d. Memprogram matakuliah magang pada program KRS (Kartu Rencana Studi). e. Terdaftar sebagai peserta magang yang direkomendasikan oleh coordinator magang program studi"
+  },
+  {
+    "question": "Apa saja mekanisme dalam kegiatan magang di UNIPMA?",
+    "ground_truth":"1. UPPLM melakukan sosialisasi kegiatan magang yang akan diselenggarakan. 2. UPPLM membuka periode pendaftaran magang 3 bulan sebelum dimulainya periode pelaksanaan magang. 3. Mahasiswa melakukan pendaftaran magang sesuai dengan rekomendasi yang diberikan oleh program studi"
+  },
+  {
+    "question": "Apa isi pada Bab 3 Profil Mitra Magang?",
+    "ground_truth":"Profil mitra/instansi tempat magang. Profil mitra/instansi mencakup : deskripsi singkat mitra/instansi, struktur organisasi mitra/instansi, kegiatan/proses bisnis yang diselenggarakan oleh mitra/instansi"
+  },
+  {
+    "question": "Apa isi Bab 4 Mekanisme Pelaksanaan dan Hasil Magang?",
+    "ground_truth":"Mekanisme yang dilakukan pada saat magang mulai dari tugas pokok yang diberikan pada saat berkegiatan magang, cara/metode penyelesaian masalah yang dilakukan, hasil penyelesaian masalah yang didapatkan"
+  },
+  {
+    "question": "Bagaimana sistem penomoran dan sistematika penulisan angka/ huruf bab, judul bab, judul sub-bab, dan judul anak sub-bab?",
+    "ground_truth":"Nomor bab ditulis dengan menggunakan angka Romawi (kapital), judul bab ditulis dengan huruf besar tebal, keduanya ditulis pada bagian tengah atas. Sedangkan judul sub-bab dan judul anak sub-bab hanya huruf awal setiap katanya yang ditulis dengan huruf besar tebal, penulisan dimulai dari margin kiri. Alinea diketik mulai tujuh ketukan dari tepi kiri pada sub-bab yang bersangkutan."
+  },
+  {
+    "question": "Apa saja ruang lingkup bidang ilmu kegiatan magang Program Studi Teknik Informatika?",
+    "ground_truth":"1. Pengembangan perangkat lunak. 2. Pengembangan G I S (Sistem Informasi Geografis). 3. Artificial Intelligence. 4. Mobile Application. 5. Sistem Informasi. 6. Multimedia. 7. Bidang Information System Bussiness. 8. Bidang Information System Auditor. 9. Bidang Software Developer"
+  },
+  {
+    "question": "Berapa persentase nilai untuk masing-masing komponen penilaian magang?",
+    "ground_truth":"Pembekalan sebesar 10%, Nilai Dosen Pembimbing sebesar 50% dan Nilai Pembimbing Lapangan (instansi) sebesar 40%."
+  },
+  {
+    "question": "Bagaimana ketentuan penyajian tabel?",
+    "ground_truth":"(1) jika tabel cukup besar (lebih dari setengah halaman), maka tabel harus ditempatkan pada halaman tersendiri, dan jika tabel cukup pendek (kurang dari setengah halaman) sebaiknya diintegrasikan dengan teks; (2) tabel harus diberi identitas berupa nomor tabel dan nama tabel dan ditempatkan di atas tabel. Jika tabel lebih dari satu halaman, maka pada bagian kepala tabel (termasuk teks-nya) harus diulang pada halaman berikutnya; (3) Hanya huruf pertama kata tabel ditulis dengan menggunakan huruf besar;"
+  }
+]

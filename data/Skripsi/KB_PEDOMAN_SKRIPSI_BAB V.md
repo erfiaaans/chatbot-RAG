@@ -90,12 +90,14 @@ Freire, P. & Illich, I. (2004). Menggugat Pendidikan. Terj. Omi Intan
 Naomi. Yogyakarta: Pustaka Pelajar.
 
 ### I. Sumber Berupa Skripsi, Tesis, atau Disertasi yang tidak dipublikasi
+
 Nama penyusun ditulis paling depan, diikuti tahun yang tercantum pada sampul, judul skripsi, tesis atau disertasi ditulis dengan garis bawah atau huruf miring diikuti dengan pernyataan Skripsi, Tesis, atau Disertasi tidak diterbitkan, nama kota tempat perguruan tinggi, dan nama fakultas serta nama perguruan tinggi.
 
 Contoh:
 Handika, J.(2012).Perencanaan Pengembangan Alat Pengasapan Ikan Menggunakan Pendekatan QFD dan Pengujian Organoleptik.Tesis tidak diterbitkan. Madiun: Program Studi Teknik Industri.
 
 ### J. Sumber berupa proceeding pertemuan atau simposium
+
 Jika kumpulan artikel atau makalah yang disajikan dalam simposium seminar, penataran, lokakarya diterbitkan dan ada editornya, nama editor ditulis di depan diikuti tahun, judul proceeding (bila ada), dan nama pertemuan.
 
 Contoh:
@@ -119,6 +121,6 @@ Adapun penulisan daftar pustaka secara online (merujuk pada google scholar ) ter
 
 ### L. Ketentuan Dalam Daftar Pustaka
 
-1. Daftar Pustakan harus memenuhi jumlah minimal referensi sebagai berikut : 5 Buku Referensi, 15 Referensi Jurnal/Proseding Nasional dan 5 Jurnal/Proseding Internasional
+1. Daftar Pustaka harus memenuhi jumlah minimal referensi sebagai berikut : 5 Buku Referensi, 15 Referensi Jurnal/Proseding Nasional dan 5 Jurnal/Proseding Internasional
 2. Daftar pustaka harus ditulis dengan format APA Style
 3. Daftar pustaka ditulis dengan menggunakan aplikasi Sitasi seperti Mendeley, EndNote, Zatero dan lainnya.

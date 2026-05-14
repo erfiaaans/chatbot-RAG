@@ -105,7 +105,7 @@ b. Rekomendasi Ketua Program Studi;
 
 c. Pernyataan kesanggupan untuk menyelesaikan studi selama masa perpanjangan studi;
 
-2.Usulan perpanjangan masa studi disampaikan oleh Dekan kepada Rektor melalui Wakil Rektor Bidang Akademik, Kemahasiswaan dan Akreditasi (Warek Bidang 1).
+2. Usulan perpanjangan masa studi disampaikan oleh Dekan kepada Rektor melalui Wakil Rektor Bidang Akademik, Kemahasiswaan dan Akreditasi (Warek Bidang 1).
 
 ### D. Mahasiswa Baru Pindahan
 
@@ -124,10 +124,13 @@ Program studi yang ada di Fakultas Teknik Universitas PGRI Madiun juga menerima 
     c. Mengikuti proses penilaian yang dilakukan Fakultas Teknik / Program Studi yang dituju, agar diketahui bahwa calon tersebut :
 
         1. Telah menempuh studi di Fakultas / Program Studi asal sekurang-kurangnya 1 (satu) semester berturut-turut;
+
         2. Mempunyai IPK sekurang-kurangnya 2,50 dari semua mata kuliah yang dikonversikan/disetarakan;
+
         3. Setelah dilakukan penilaian dan memenuhi syarat untuk diterima menjadi mahasiswa pindahan, calon tersebut harus bersedia menandatangani surat pernyataan kesediaan mematuhi Tata Tertib Kehidupan Kampus dan aturan lainnya sesuai ketentuan yang berlaku;
 
-2.  Penerimaan mahasiswa pindahan dari Fakultas/Program Studi dari luar Universitas ditentukan dengan prosedur dan persyaratan sebagai berikut :
+2.  Penerimaan mahasiswa pindahan dari Fakultas/Program Studi dari luar Universitas ditentukan dengan prosedur dan persyaratan sebagai berikut:
+
     a. Melakukan pendaftaran ulang di Biro Penerimaan Mahasiswa Baru (PMB)
 
     b. Menyerahkan berkas persyaratan di Biro Administrasi Akademik (BAA), diantaranya:
