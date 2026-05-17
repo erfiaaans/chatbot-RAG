@@ -42,6 +42,7 @@ class GeminiGenerator:
     def __init__(self):
         self.client = genai.Client(api_key=settings.gemini_api_key)
         self.model = settings.llm_model
+        print(f"Using Gemini model: {self.model}")
 
     def generate(self, prompt: str) -> dict:
         try:

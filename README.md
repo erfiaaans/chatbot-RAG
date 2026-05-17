@@ -85,4 +85,5 @@ chatbot-rag/
 ```
 uv sync
 uv run python app.py
+python evaluation/evaluate_ragas.py
 ```

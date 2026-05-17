@@ -1,75 +1,111 @@
+import time
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import json
+from dotenv import load_dotenv
 from datasets import Dataset
 from ragas import evaluate
+from ragas.dataset_schema import (
+    EvaluationDataset, 
+    SingleTurnSample
+)
 from ragas.metrics import (
-    faithfulness,
-    answer_relevancy,
-    context_precision,
-    context_recall,
+    Faithfulness,
+    AnswerRelevancy,
+    ContextPrecision,
+    ContextRecall,
 )
 
+from langchain_google_genai import ChatGoogleGenerativeAI
 from src.core.rag_pipeline import RAGPipeline
+load_dotenv()
 with open("evaluation/test_questions.json", "r", encoding="utf-8") as f:
     test_data = json.load(f)
 rag = RAGPipeline()
 
-questions = []
-answers = []
-contexts = []
-ground_truths = []
+evaluator_llm = ChatGoogleGenerativeAI(
+    model=os.getenv("LLM_MODEL"),
+    google_api_key=os.getenv("GEMINI_API_KEY"),
+    temperature=0,
+)
 
+samples = []
+print("=" * 60)
+print("Starting RAGAS evaluation...")
+print("=" * 60)
 
-for item in test_data:
+for idx, item in enumerate(test_data):
     question = item["question"]
     ground_truth = item["ground_truth"]
 
-    retrieved_chunks = rag.retriever.retrieve(question)
+    try:
+        print(f"\n[{idx + 1}/{len(test_data)}]")
+        print(f"Processing question: {question}")
+        retrieved_chunks = rag.retriever.retrieve(question)
 
-    retrieved_contexts = [
-        chunk.get("text", "")
-        for chunk in retrieved_chunks
-    ]
+        retrieved_contexts = []
+        for chunk in retrieved_chunks:
+            if isinstance(chunk, dict):
+                retrieved_contexts.append(
+                    chunk.get("text", "")
+                )
+            elif hasattr(chunk, "page_content"):
+                retrieved_contexts.append(
+                    chunk.page_content
+                )
 
 
-    prompt = rag.assembler.assemble(
-        retrieved_chunks,
-        question,
-        []
-    )
+        prompt = rag.assembler.assemble(
+            retrieved_chunks,
+            question,
+            []
+        )
 
-    answer = rag.generator.generate(prompt)
-
-    questions.append(question)
-    answers.append(answer)
-    contexts.append(retrieved_contexts)
-    ground_truths.append(ground_truth)
-
-    print(f"Question : {question}")
-    print(f"Answer   : {answer}")
-    print("=" * 60)
-
-dataset = Dataset.from_dict({
-    "question": questions,
-    "answer": answers,
-    "contexts": contexts,
-    "ground_truth": ground_truths,
-})
-
+        answer = rag.generator.generate(prompt)
+        print(f"Answer: {answer[:150]}...")
+        samples.append(
+            SingleTurnSample(
+                user_input=question,
+                response=answer,
+                reference=ground_truth,
+                retrieved_contexts=retrieved_contexts,
+            )
+        )
+        time.sleep(15)
+    
+    except Exception as e:
+        print(f"Error processing question: {question}")
+        print(f"Error message: {str(e)}")
+        continue
+    
+if len(samples) == 0:
+    print("\nTidak ada sample berhasil diproses.")
+    print("Kemungkinan quota Gemini habis.")
+    exit()
+dataset = EvaluationDataset(
+    samples=samples
+)
+print("\n")
+print("=" * 60)
+print("MENJALANKAN RAGAS")
+print("=" * 60)
 result = evaluate(
     dataset=dataset,
     metrics=[
-        faithfulness,
-        answer_relevancy,
-        context_precision,
-        context_recall,
+        Faithfulness(),
+        AnswerRelevancy(),
+        ContextPrecision(),
+        ContextRecall(),
     ],
+    llm=evaluator_llm,
 )
 
 print("\n===== RAGAS RESULT =====")
 print(result)
 
 result_df = result.to_pandas()
-result_df.to_csv("evaluation/ragas_result.csv", index=False)
+output_path = "evaluation/ragas_result.csv"
+result_df.to_csv(output_path, index=False)
 
-print("\nHasil evaluasi disimpan ke:")
-print("evaluation/ragas_result.csv")
+print(f"\nHasil evaluasi disimpan ke: {output_path}")
