@@ -1,5 +1,5 @@
 [
-{
+  {
     "question": "Apa saja yang harus dijabarkan pada latar belakang masalah?",
     "ground_truth": "Latar Belakang Masalah menjelaskan gambaran permasalahan dan alasan pemilihan permasalahan, mengapa tertarik untuk mengambil topik ini. Penulisan latar belakang masalah harus mencangkup unsur what (apa), who (siapa), when (kapan), where (di mana), why (mengapa), dan how (bagaimana) (5W+ H)."
   },

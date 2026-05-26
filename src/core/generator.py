@@ -1,12 +1,17 @@
 from google import genai
+
 from src.config.config import settings
 from src.config.prompts import load_prompt
+
 PROMPT_TEMPLATE = load_prompt("prompts.md")
+
+
 class ContextAssembler:
     def format_chunk(self, c: dict) -> str:
         source = c.get("meta", {}).get("source", "-")
         text = c.get("text", "").strip()
         return f"""[Sumber: {source}]\n{text}"""
+
     def assemble(self, chunks: list[dict], question: str, history: list = []) -> str:
         try:
             context = "\n\n CHUNK \n\n".join(self.format_chunk(c) for c in chunks)
@@ -27,12 +32,15 @@ class ContextAssembler:
             )
         except Exception as e:
             raise ValueError(f"Gagal menyusun prompt: {e}") from e
+
+
 class GeminiGenerator:
     def __init__(self):
         self.client = genai.Client(api_key=settings.gemini_api_key)
         self.model = settings.llm_model
         print(f"Using Gemini model: {self.model}")
-    def generate(self, prompt: str) -> dict:
+
+    def generate(self, prompt: str) -> str:
         try:
             response = self.client.models.generate_content(
                 model=self.model,
@@ -42,6 +50,6 @@ class GeminiGenerator:
                     "max_output_tokens": settings.max_output_tokens,
                 },
             )
-            return response.text
+            return response.text or ""
         except Exception as e:
             raise RuntimeError(f"Gagal generate jawaban: {e}") from e

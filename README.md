@@ -86,6 +86,7 @@ chatbot-rag/
 uv sync
 uv run python app.py
 python evaluation/evaluate_ragas.py
+uv run python evaluation/evaluate_ragas.py
 ```
 
 pip install ragas==0.1.9 datasets pandas python-dotenv langchain==0.1.20 langchain-core==0.1.52 langchain-community==0.0.38 langchain-google-genai==1.0.3 langchain-openai==0.1.7 google-generativeai google-cloud-aiplatform openai
