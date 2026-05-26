@@ -18,7 +18,6 @@ class IngestionPipeline:
         documents: list[dict],
         overwrite: bool = False,
     ) -> dict:
-        # Check if the collection already contains anything
         existing_count = self.store._get_collection_count()
 
         if existing_count > 0 and not overwrite:
@@ -59,10 +58,6 @@ class IngestionPipeline:
             "total_files": len(documents),
             "total_chunks": len(all_chunks),
         }
-
-    # ==============================
-    # INGEST SINGLE FILE
-    # ==============================
     def run(self, file_path: str) -> dict:
         doc = self.loader.load(file_path)
 
@@ -88,10 +83,6 @@ class IngestionPipeline:
             "chunks": len(chunks),
             "doc_id": doc_id,
         }
-
-    # ==============================
-    # INGEST FOLDER (INI YANG KAMU BUTUH)
-    # ==============================
     def run_folder(self, folder_path: str) -> dict:
         documents = self.loader.load_folder(folder_path)
 
@@ -120,10 +111,6 @@ class IngestionPipeline:
             "total_chunks": len(all_chunks),
             "doc_id": doc_id,
         }
-
-    # ==============================
-    # 🔄 RE-INGEST
-    # ==============================
     def re_ingest(self, file_path: str, doc_id: str) -> dict:
         self.store.delete(doc_id)
         return self.run(file_path)

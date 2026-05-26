@@ -19,33 +19,25 @@ Answer formatting rules:
 - Use bullet points only when truly necessary.
 - Keep spacing and line breaks clean and readable.
 - If the question is too general or ambiguous, ask the user to clarify the question.
-
-
-```
-
 ---
 
 ## Conversation History
 
-```
 {history_section}
-```
 
 ---
 
 ## Document Context
 
-```
 {context}
-```
 
 ---
 
 ## User Question
 
 ```
+
 {question}
-```
 
 ---
 

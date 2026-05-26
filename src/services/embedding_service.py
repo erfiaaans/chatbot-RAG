@@ -1,9 +1,6 @@
-from sentence_transformers import SentenceTransformer  # type: ignore
+from sentence_transformers import SentenceTransformer
 from src.config.config import settings
-
 _model = None
-
-
 def get_model():
     global _model
     if _model is None:
@@ -14,14 +11,10 @@ def get_model():
         )
         print("Embedding model berhasil di-load")
     return _model
-
-
 class EmbeddingService:
     def __init__(self):
         self.model = get_model()
-
     def embed(self, text: str) -> list[float]:
         return self.model.encode(text).tolist()
-
     def embed_query(self, text: str) -> list[float]:
         return self.model.encode(text).tolist()

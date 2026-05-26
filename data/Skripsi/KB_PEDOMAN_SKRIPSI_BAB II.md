@@ -5,9 +5,7 @@
 ### Kode Etik Penulisan Skripsi/Tugas Akhir
 
 Kode etik penulisan karya ilmiah adalah seperangkat norma yang perlu diperhatikan dalam menyusun dan menulis karya ilmiah yang berkaitan dengan pengutipan, perujukan dan perizinan terhadap bahan yang digunakan serta penyebutan sumber data. Menulis karya ilmiah diperlukan kejujuran dalam merumuskan dan menuangkan dalam naskah ilmiah serta menyebut rujukan terhadap bahan atau pikiran yang diambil dari sumber lain. Dengan demikian maka secara garis besar adalah pengakuan bahwa karya itu adalah murni hasil karya pribadi, kalaupun harus mengutip tulisan ide atau pokok pikiran dari orang lain maka harus mencantumkan sumber ide pokok pikiran tersebut sehingga tulisan tersebut tidak termasuk kategori plagiasi.
-
 Plagiasi merupakan tindak kecurangan dengan mengambil tulisan atau pemikiran orang lain dan kemudian diakui sebagai hasil tulisan atau karyanya sendiri. Oleh karena itu, penulis/peneliti wajib membuat dan mencantumkan pernyataan dalam naskah ilmiah bahwa karyanya itu bukan merupakan pengambilalihan atau plagiasi atas tulisan atau pemikiran orang lain.
-
 Skripsi/Tugas Akhir yang disusun oleh mahasiswa, merupakan hasil dari penelitian yang dilakukan dalam sebuah proses yang dilakukan dengan pembimbingan dari dosen pembimbing. Semua proses pembimbingan dalam menghasilkan karya ilmiah akan dilanjutkan dalam ujian untuk mempertanggungjawabkan naskah ilmiahnya di hadapan penguji. Serangkaian proses penyusunan karya ilmiah yang melibatkan peran aktif dosen dan mahasiswa diatur dan dituangkan dalam kode etik. Berdasarkan uraian tersebut, maka ketentuan kode etik penulisan karya ilmiah diatur pada halaman 5-12 atau bisa dilihat pada tautan berikut : https://drive.google.com/file/d/1pUdMyXwD0nFe9EOBEscbtqM2WE9S6aTy/view
 
 ### Ketentuan Umum
