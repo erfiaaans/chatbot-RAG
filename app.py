@@ -16,6 +16,10 @@ def index():
 def chatbot():
     return render_template("landing-page.html")
 
+@app.route('/cara-penggunaan')
+def cara_penggunaan():
+    return render_template('cara-penggunaan.html')
+
 app.register_blueprint(chat_bp, url_prefix="/api")
 
 # Inisialisasi dokumen saat startup

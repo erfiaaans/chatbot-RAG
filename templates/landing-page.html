@@ -43,7 +43,8 @@
     >
       <div class="max-w-7xl mx-auto flex items-center justify-between">
         <!-- LOGO -->
-        <div
+        <a
+          href="/chatbot"
           class="flex items-center gap-3 text-white font-bold text-xl tracking-tight"
         >
           <div
@@ -64,16 +65,16 @@
             </svg>
           </div>
 
-          <div class="leading-tight">
+          <div href="/chatbot" class="leading-tight">
             <h1 class="text-base sm:text-lg font-semibold">Chatbot Akademik</h1>
             <p class="text-xs text-blue-100 font-medium">Prodi TIF UNIPMA</p>
           </div>
-        </div>
+        </a>
 
         <div class="flex items-center gap-4 ml-auto">
           <nav class="hidden md:flex items-center gap-5">
             <a
-              href="#"
+              href="/cara-penggunaan"
               class="px-4 py-2 rounded-xl bg-white text-blue-600 text-sm font-semibold hover:bg-blue-50 transition-all shadow-sm"
             >
               Cara Penggunaan
@@ -118,19 +119,6 @@
           class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-center"
         >
           <div class="flex flex-col justify-center order-2 md:order-1">
-            <!-- <div
-              class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-100 text-brand-700 font-medium text-sm w-max mb-6"
-            >
-              <span class="relative flex h-2 w-2">
-                <span
-                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-500 opacity-75"
-                ></span>
-                <span
-                  class="relative inline-flex rounded-full h-2 w-2 bg-brand-600"
-                ></span>
-              </span>
-              Sistem AI Terintegrasi
-            </div> -->
             <h1
               class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-brand-900 leading-[1.15] tracking-tight"
             >
@@ -164,11 +152,12 @@
                   ></path>
                 </svg>
               </button>
-              <button
+              <a
+                href="/cara-penggunaan"
                 class="px-8 py-3.5 rounded-xl bg-white text-brand-600 font-semibold border border-slate-200 shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 flex items-center justify-center"
               >
                 Pelajari Cara Penggunaan
-              </button>
+              </a>
             </div>
           </div>
           <div class="order-1 md:order-2">
@@ -393,10 +382,16 @@
         </div>
       </div>
     </main>
+    <footer
+      class="bg-blue-600 border-t border-slate-100 py-6 text-center text-xs text-white"
+    >
+      © 2026 Chatbot Akademik — Prodi Teknik Informatika Universitas PGRI
+      Madiun.
+    </footer>
     <button
       id="chat-toggle-btn"
       onclick="toggleChat()"
-      class="fixed bottom-6 right-6 lg:bottom-8 lg:right-8 w-14 h-14 bg-brand-600 text-white rounded-full shadow-xl shadow-brand-500/40 flex items-center justify-center hover:bg-brand-700 hover:scale-105 hover:shadow-2xl transition-all duration-300 z-50 focus:outline-none"
+      class="fixed bottom-20 right-6 lg:bottom-24 lg:right-8 w-14 h-14 bg-brand-600 text-white rounded-full shadow-xl shadow-brand-500/40 flex items-center justify-center hover:bg-brand-700 hover:scale-105 hover:shadow-2xl transition-all duration-300 z-50 focus:outline-none"
     >
       <svg
         id="chat-icon-default"
