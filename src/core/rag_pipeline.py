@@ -1,13 +1,16 @@
 import os
 import sys
+
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
-from google import genai
-from src.core.retriever import Retriever
+import re
+
+from src.config.config import settings
 from src.core.generator import ContextAssembler, GeminiGenerator
+from src.core.retriever import Retriever
 from src.ingestion.document_loader import DocumentLoader
 from src.ingestion.text_chunker import TextChunker
-from src.config.config import settings
-import re
+
+
 class RAGPipeline:
     def __init__(self):
         self.retriever = Retriever()
@@ -16,6 +19,7 @@ class RAGPipeline:
         self.loader = DocumentLoader()
         self.chunker = TextChunker()
         self.history = []
+
     def clean_response(self, text: str) -> str:
         """
         Membersihkan format jawaban AI agar lebih rapi
@@ -27,19 +31,34 @@ class RAGPipeline:
         text = re.sub(r"\n{3,}", "\n\n", text)
         text = re.sub(r" +", " ", text)
         return text
+
     def rag_query(self, question: str) -> dict:
         chunks = self.retriever.retrieve(question)
         if not chunks:
             return {"answer": "Informasi tidak ditemukan dalam dokumen.", "sources": []}
-        sources = list({meta.get("source") for c in chunks if (meta := c.get("meta"))})
+        # sources = list({meta.get("source") for c in chunks if (meta := c.get("meta"))})
+        unique_sources = {}
+        for c in chunks:
+            meta = c.get("meta", {})
+            source_name = meta.get("source")
+            if source_name and source_name not in unique_sources:
+                unique_sources[source_name] = {
+                    "name": source_name,
+                    "url": meta.get(
+                        "source_url", "#"
+                    ),  # Ambil URL, default '#' jika kosong
+                }
+        sources = list(unique_sources.values())
         recent = self.history[-settings.conversation_window :]
         prompt = self.assembler.assemble(chunks, question, recent)
         print(prompt)
         result = self.generator.generate(prompt)
         self.history.append({"question": question, "answer": result})
         return {"answer": result, "sources": sources}
+
     def reset_history(self):
         self.history = []
+
     def dummy_rag_query(self, question):
         chunks = self.retriever.retrieve(question)
         if not chunks:
@@ -63,9 +82,19 @@ class RAGPipeline:
             lines.append("")
         answer = "\n".join(lines)
         try:
-            sources = list(
-                {meta.get("source") for c in chunks if (meta := c.get("meta"))}
-            )
+            # sources = list(
+            #     {meta.get("source") for c in chunks if (meta := c.get("meta"))}
+            # )
+            unique_sources = {}
+            for c in chunks:
+                meta = c.get("meta", {})
+                source_name = meta.get("source")
+                if source_name and source_name not in unique_sources:
+                    unique_sources[source_name] = {
+                        "name": source_name,
+                        "url": meta.get("source_url", "#"),
+                    }
+            sources = list(unique_sources.values())
             recent = self.history[-settings.conversation_window :]
             prompt = self.assembler.assemble(chunks, question, recent)
             self.history.append({"question": question, "answer": "Haloo"})
@@ -75,10 +104,14 @@ class RAGPipeline:
                 "answer": f"{str(e)}",
                 "sources": [],
             }
-#Testing
+
+
+# Testing
 if __name__ == "__main__":
     print("FILE LOADED", flush=True)
-    import sys, os
+    import os
+    import sys
+
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
     try:
@@ -120,4 +153,5 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"\nERROR: {e}", flush=True)
         import traceback
+
         traceback.print_exc()

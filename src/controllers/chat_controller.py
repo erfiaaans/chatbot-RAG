@@ -1,14 +1,16 @@
 import json
-import time
-import re
 import random
+import re
+import time
 from datetime import datetime
-from flask import Blueprint, request, jsonify, render_template, Response
+
+from flask import Blueprint, Response, jsonify, request
 
 from src.core.rag_pipeline import RAGPipeline
 
 chat_bp = Blueprint("chat", __name__)
 rag = RAGPipeline()
+
 
 @chat_bp.route("/chat", methods=["POST"])
 def chat():
@@ -26,8 +28,8 @@ def chat():
             time.sleep(random.uniform(0.2, 0.6))
             yield f"data: {json.dumps({'meta': {'time': start_time}}, ensure_ascii=False)}\n\n"
 
-            # result = rag.dummy_rag_query(question)
-            result = rag.rag_query(question)
+            result = rag.dummy_rag_query(question)
+            # result = rag.rag_query(question)
             answer = result["answer"]
             sources = result.get("sources", [])
 

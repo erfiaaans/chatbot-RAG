@@ -238,18 +238,19 @@ async function sendMessage() {
                     }
 
                     // ===== SOURCES =====
-                    if (data.sources && !sourcesRendered) {
+                    if (data.sources && data.sources.length > 0 && !sourcesRendered) {
                         sourcesRendered = true;
 
                         const sourcesHtml = `
                             <div class="sources mt-2 border-t border-slate-100 pt-2">
                                 <span class="text-xs font-semibold text-slate-400 block mb-1">Sumber:</span>
                                 ${data.sources.map(s => {
-                            const match = s.match(/^(.*?)\s*\((https?:\/\/[^\)]+)\)$/);
-                            if (match) {
-                                return `<a href="${match[2]}" target="_blank" class="inline-flex items-center gap-1 bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-600 text-[10px] px-2 py-1 rounded-md mr-1 mb-1 transition-colors">📄 ${match[1]}</a>`;
+
+                            if (s.url && s.url !== "#") {
+                                return `<a href="${s.url}" target="_blank" class="inline-flex items-center gap-1 bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-600 text-[10px] px-2 py-1 rounded-md mr-1 mb-1 transition-colors">📄 ${s.name}</a>`;
                             }
-                            return `<span class="inline-block bg-slate-100 text-slate-600 text-[10px] px-2 py-1 rounded-md mr-1 mb-1">📄 ${s}</span>`;
+
+                            return `<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-600 text-[10px] px-2 py-1 rounded-md mr-1 mb-1">📄 ${s.name}</span>`;
                         }).join('')}
                             </div>
                         `;
