@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
+from google import genai
 from src.core.retriever import Retriever
 from src.core.generator import ContextAssembler, GeminiGenerator
 from src.ingestion.document_loader import DocumentLoader
@@ -71,3 +75,49 @@ class RAGPipeline:
                 "answer": f"{str(e)}",
                 "sources": [],
             }
+#Testing
+if __name__ == "__main__":
+    print("FILE LOADED", flush=True)
+    import sys, os
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
+
+    try:
+        print("Inisialisasi pipeline...", flush=True)
+        pipeline = RAGPipeline()
+        print("Pipeline OK", flush=True)
+
+        conversations = [
+            "Apa saja isi dari Kajian Teoritis?",
+            "Bagaimana format penulisan daftar pustaka?",
+            "Boleh saya tanya lagi tentang kajian teoritis tadi?",
+        ]
+
+        for i, question in enumerate(conversations, 1):
+            print(f"\n[Giliran {i}]", flush=True)
+            print(f"Pertanyaan : {question}", flush=True)
+            print(f"Riwayat sebelumnya: {len(pipeline.history)} percakapan", flush=True)
+
+            result = pipeline.rag_query(question)
+
+            print(f"Jawaban    : {result['answer'][:200]} ...", flush=True)
+            print(f"Sumber     : {result['sources']}", flush=True)
+
+        print("\n--- Verifikasi History Tersimpan ---", flush=True)
+        print(f"Total riwayat : {len(pipeline.history)} percakapan", flush=True)
+        for i, h in enumerate(pipeline.history, 1):
+            print(f"\n  [History {i}]", flush=True)
+            print(f"  Q : {h['question']}", flush=True)
+            print(f"  A : {h['answer'][:100]} ...", flush=True)
+
+        print("\n--- Pengujian Reset History ---", flush=True)
+        pipeline.reset_history()
+        print(f"History setelah reset: {len(pipeline.history)} percakapan", flush=True)
+        print("[OK] Reset history berhasil.", flush=True)
+
+        print("\n" + "=" * 60, flush=True)
+        print("Pengujian selesai.", flush=True)
+
+    except Exception as e:
+        print(f"\nERROR: {e}", flush=True)
+        import traceback
+        traceback.print_exc()

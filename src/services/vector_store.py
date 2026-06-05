@@ -1,9 +1,11 @@
 import chromadb
 import uuid
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
+
 from src.config.config import settings
 from chromadb.api.types import QueryResult, Metadata
-
-
 class VectorStore:
     def __init__(self):
         self.client = chromadb.PersistentClient(path=settings.chroma_path)
@@ -55,3 +57,49 @@ class VectorStore:
             "collection_name": collection_name,
             "deleted_chunks": count,
         }
+#Testing
+if __name__ == "__main__":
+    import sys, os
+    sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+    from src.ingestion.document_loader import DocumentLoader
+    from src.ingestion.text_chunker import TextChunker
+    from src.services.embedding_service import EmbeddingService
+
+    print("Loading dokumen...")
+    loader = DocumentLoader()
+    # doc = loader.load("data/Skripsi/KB_PEDOMAN_SKRIPSI_BAB II.md")
+    doc = loader.load("data/Kurikulum/KB_KURIKULUM.md")
+    print(f"Dokumen berhasil dimuat: {doc['filename']}")
+
+    print("Chunking...")
+    chunker = TextChunker()
+    chunks = chunker.chunk(doc["text"], doc)
+    print(f"Total chunk: {len(chunks)}")
+
+    print("Embedding...")
+    embedder = EmbeddingService()
+    vectors = [embedder.embed(c.text) for c in chunks]
+    print(f"Total vektor: {len(vectors)}")
+
+    print("Menyimpan ke VectorStore...")
+    store = VectorStore()
+    store.add(chunks, vectors, metadata={"doc_id": doc["filename"]})
+    print("Data tersimpan!")
+
+    query = "Syarat penulisan skripsi"
+    query_vector = embedder.embed_query(query)
+    results = store.search(query_vector, k=3)
+
+    print("=" * 50)
+    print(f"Filename     : {doc['filename']}")
+    print(f"Total chunk  : {len(chunks)}")
+    print(f"Total vektor : {len(vectors)}")
+    print(f"Query        : {query}")
+    print("-" * 50)
+    for i, (res_doc, res_meta) in enumerate(zip(results["documents"][0], results["metadatas"][0])):
+        print(f"\n[Hasil {i+1}]")
+        print(f"  Header  : {res_meta['header']}")
+        print(f"  Preview : {res_doc[:120]}")
+    print("\n" + "=" * 50)
+    print("VectorStore berhasil!")

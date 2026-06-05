@@ -3,7 +3,8 @@ import json
 import os
 import sys
 import time
-from typing import List
+import argparse
+from typing import List, Optional
 
 from dotenv import load_dotenv
 from pydantic.v1 import SecretStr
@@ -30,6 +31,24 @@ from ragas.metrics import (
 from src.core.rag_pipeline import RAGPipeline
 from src.services.embedding_service import EmbeddingService
 
+PROGRESS_FILE = "evaluation/progress.json"
+OUTPUT_CSV = "evaluation/ragas_result.csv"
+TEST_QUESTIONS_FILE = "evaluation/test_questions.json"
+
+SLEEP_GENERATE = int(os.getenv("SLEEP_GENERATE", "20"))
+SLEEP_EVAL = int(os.getenv("SLEEP_EVAL", "30"))
+
+LLM_METRICS = [
+    context_precision,   # ~2 req/sampel
+    faithfulness,        # ~2 req/sampel
+    context_recall,      # ~2 req/sampel
+    answer_correctness,  # ~2 req/sampel
+]
+
+EMBEDDING_METRICS = [
+    answer_relevancy,
+    answer_similarity,
+]
 
 # ==========================================
 # 1. KELAS ADAPTER UNTUK EMBEDDING LOKAL
@@ -50,6 +69,7 @@ class LocalLangchainEmbeddings(Embeddings):
 # KELAS INTERCEPTOR UNTUK FIX BUG RAGAS + GEMINI
 # ==========================================
 class SafeGemini(ChatGoogleGenerativeAI):
+    """Hapus parameter 'temperature' yang tidak diterima Gemini API."""
     def generate(self, *args, **kwargs):
         kwargs.pop("temperature", None)
         return super().generate(*args, **kwargs)

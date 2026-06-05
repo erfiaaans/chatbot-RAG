@@ -1,3 +1,6 @@
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 from google import genai
 
 from src.config.config import settings
@@ -5,12 +8,37 @@ from src.config.prompts import load_prompt
 
 PROMPT_TEMPLATE = load_prompt("prompts.md")
 
-
+SOURCE_LINKS = {
+    "KB_JADWAL_MATA_KULIAH": "https://tif.unipma.ac.id/page/111/Jadwal_Perkuliahan",
+    "KB_KALENDER_AKADEMIK": "https://tif.unipma.ac.id/page/87/Kalender_Akademik",
+    "KB_KURIKULUM": "https://tif.unipma.ac.id/page/84/Kurikulum",
+    "KB_PEDOMAN_MAGANG": "https://tif.unipma.ac.id/page/90/Download",
+    "KB_PANDUAN_PENDIDIKAN": "https://ft.unipma.ac.id/view/609",
+    "KB_PEDOMAN_SKRIPSI": "https://ft.unipma.ac.id/view/609",
+}
 class ContextAssembler:
     def format_chunk(self, c: dict) -> str:
+        # source = c.get("meta", {}).get("source", "-")
+        # text = c.get("text", "").strip()
+        # return f"""[Sumber: {source}]\n{text}"""
+
         source = c.get("meta", {}).get("source", "-")
+        filename = os.path.basename(source)
+        stem = filename.replace(".md", "")
+        
+        link = None
+        for prefix, url in SOURCE_LINKS.items():
+            if stem.startswith(prefix):
+                link = url
+                break
+
+        print(f"source: {source}")      
+        print(f"stem: {stem}")      
+        print(f"link: {link}")
+        
+        source_display = f"{filename} ({link})" if link else filename
         text = c.get("text", "").strip()
-        return f"""[Sumber: {source}]\n{text}"""
+        return f"""[Sumber: {source_display}]\n{text}"""
 
     def assemble(self, chunks: list[dict], question: str, history: list = []) -> str:
         try:
@@ -21,15 +49,18 @@ class ContextAssembler:
                     for h in history
                 )
             else:
-                history_text = (
-                    "Belum ada riwayat percakapan. Mahasiswa baru memulai chat."
-                )
+                history_text = "Belum ada riwayat percakapan. Mahasiswa baru memulai chat."
             history_section = history_text
-            return PROMPT_TEMPLATE.format(
-                history_section=history_section,
-                context=context,
-                question=question,
-            )
+            # return PROMPT_TEMPLATE.format(
+            #     history_section=history_section,
+            #     context=context,
+            #     question=question,
+            # )
+            prompt = PROMPT_TEMPLATE
+            prompt = prompt.replace("{history_section}", history_text)
+            prompt = prompt.replace("{context}", context)
+            prompt = prompt.replace("{question}", question)
+            return prompt
         except Exception as e:
             raise ValueError(f"Gagal menyusun prompt: {e}") from e
 
@@ -52,4 +83,51 @@ class GeminiGenerator:
             )
             return response.text or ""
         except Exception as e:
-            raise RuntimeError(f"Gagal generate jawaban: {e}") from e
+           error_msg = str(e)
+        if "429" in error_msg or "RESOURCE_EXHAUSTED" in error_msg or "quota" in error_msg.lower():
+            raise RuntimeError("Sistem sedang sibuk atau batas penggunaan harian telah tercapai. Mohon tunggu beberapa saat dan coba lagi.")
+        raise RuntimeError(f"Gagal generate jawaban: {e}") from e
+#Testing
+if __name__ == "__main__":
+    import sys, os
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
+
+    try:
+        from src.core.retriever import Retriever
+
+        print("=" * 60, flush=True)
+        print("PENGUJIAN MODUL GENERATION", flush=True)
+        print("=" * 60, flush=True)
+
+        print("\nPengujian Context Assembler", flush=True)
+        print("-" * 40, flush=True)
+
+        retriever = Retriever()
+        assembler = ContextAssembler()
+
+        question = "Apa saja isi dari Kajian Teoritis?"
+        chunks = retriever.retrieve(question)
+
+        print(f"Query         : {question}", flush=True)
+        print(f"Jumlah chunk  : {len(chunks)}", flush=True)
+
+        prompt = assembler.assemble(chunks, question)
+        print(prompt[:500] + " ...", flush=True)
+        print("[OK] Context Assembler berhasil.", flush=True)
+
+        print("\nPengujian LLM Generator", flush=True)
+        print("-" * 40, flush=True)
+
+        generator = GeminiGenerator()
+        answer = generator.generate(prompt)
+
+        print(f"Pertanyaan    : {question}", flush=True)
+        print(f"Jawaban LLM   :\n{answer}", flush=True)
+
+        print("\n" + "=" * 60, flush=True)
+        print("Pengujian selesai.", flush=True)
+
+    except Exception as e:
+        print(f"ERROR: {e}", flush=True)
+        import traceback
+        traceback.print_exc()

@@ -1,6 +1,8 @@
 import os
 from pypdf import PdfReader
 from docx import Document
+from rich.console import Console
+from rich.table import Table
 import re
 
 class DocumentLoader:
@@ -49,3 +51,43 @@ class DocumentLoader:
         text = re.sub(r"\n{3,}", "\n\n", text)
 
         return text.strip()
+
+# Testing
+if __name__ == "__main__":
+    loader = DocumentLoader()
+    documents = loader.load_folder("data/")
+
+    # print("=" * 50)
+    # print(f"Total dokumen dimuat: {len(documents)}")
+    # print("=" * 50)
+    
+    # for doc in documents:
+    #     print(f"[{doc['category']}] {doc['filename']} ({doc['format']})")
+    #     print(f"  Preview: {doc['text'][:100]}...")
+    #     print()
+        
+    # TABEL RICH  
+    console = Console()
+    table = Table(
+        title=f"Knowledge Base — {len(documents)} Dokumen",
+        show_lines=True,
+        header_style="bold black"
+    )
+
+    table.add_column("No",       style="black", width=4)
+    table.add_column("Category", style="black", width=20)
+    table.add_column("Filename", style="black", width=25)
+    table.add_column("Format",   style="black", width=8)
+    table.add_column("Preview",  style="black", width=50)
+
+    for i, doc in enumerate(documents, 1):
+        table.add_row(
+            str(i),
+            doc["category"],
+            doc["filename"],
+            doc["format"],
+            doc["text"][:80].replace("\n", " ") + "...",
+        )
+
+    console.print(table)
+    print("DocumentLoader berhasil!")
