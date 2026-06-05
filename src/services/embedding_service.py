@@ -1,9 +1,16 @@
-import sys
 import os
+import sys
+
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
+from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
+
 from src.config.config import settings
+
+load_dotenv()
 _model = None
+
+
 def get_model():
     global _model
     if _model is None:
@@ -14,19 +21,25 @@ def get_model():
         )
         print("Embedding model berhasil di-load")
     return _model
+
+
 class EmbeddingService:
     def __init__(self):
         self.model = get_model()
+
     def embed(self, text: str) -> list[float]:
         return self.model.encode(text).tolist()
+
     def embed_query(self, text: str) -> list[float]:
         return self.model.encode(text).tolist()
-    
-#Testing
+
+
+# Testing
 if __name__ == "__main__":
+    from rich import box
     from rich.console import Console
     from rich.table import Table
-    from rich import box
+
     from src.ingestion.document_loader import DocumentLoader
 
     loader = DocumentLoader()
@@ -43,13 +56,13 @@ if __name__ == "__main__":
         title="Embedding Preview — Seluruh Dokumen",
         box=box.ROUNDED,
         show_lines=True,
-        header_style="bold black"
+        header_style="bold black",
     )
-    table.add_column("No",       style="black", width=4,  justify="center")
+    table.add_column("No", style="black", width=4, justify="center")
     table.add_column("Category", style="black", width=12)
     table.add_column("Filename", style="black", width=30)
-    table.add_column("Input Text",style="black", width=35)
-    table.add_column("Dimensi",  style="black", width=8,  justify="center")
+    table.add_column("Input Text", style="black", width=35)
+    table.add_column("Dimensi", style="black", width=8, justify="center")
     table.add_column("Preview Vector", style="black", width=30)
 
     for i, doc in enumerate(documents):

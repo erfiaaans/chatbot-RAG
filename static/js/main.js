@@ -41,13 +41,12 @@ function appendMessage(role, text) {
         div.className = 'flex gap-3 max-w-[85%]';
         div.innerHTML = `
             <div class="w-8 h-8 rounded-full bg-brand-100 flex-shrink-0 flex items-center justify-center text-brand-600 mt-1 shadow-sm">
-                <!-- Ikon AI Sparkle -->
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"></path>
                 </svg>
             </div>
 
-            <div class="bubble bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-sm text-slate-700 leading-relaxed">
+            <div class="bubble prose prose-sm prose-slate max-w-none bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-sm text-slate-700 leading-relaxed">
                 ${text}
             </div>
         `;
@@ -231,7 +230,9 @@ async function sendMessage() {
                     // ===== STREAM TEXT =====
                     if (data.token) {
                         fullText += data.token;
-                        botBubble.innerHTML = fullText;
+
+                        // Ubah bagian ini menggunakan marked.parse
+                        botBubble.innerHTML = marked.parse(fullText);
 
                         const messages = document.getElementById('messages');
                         messages.scrollTop = messages.scrollHeight;
@@ -245,17 +246,17 @@ async function sendMessage() {
                             <div class="sources mt-2 border-t border-slate-100 pt-2">
                                 <span class="text-xs font-semibold text-slate-400 block mb-1">Sumber:</span>
                                 ${data.sources.map(s => {
-
                             if (s.url && s.url !== "#") {
-                                return `<a href="${s.url}" target="_blank" class="inline-flex items-center gap-1 bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-600 text-[10px] px-2 py-1 rounded-md mr-1 mb-1 transition-colors">📄 ${s.name}</a>`;
+                                return `<a href="${s.url}" target="_blank" class="inline-flex items-center gap-1 bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-600 text-[10px] px-2 py-1 rounded-md mr-1 mb-1 transition-colors no-underline">📄 ${s.name}</a>`;
                             }
-
                             return `<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-600 text-[10px] px-2 py-1 rounded-md mr-1 mb-1">📄 ${s.name}</span>`;
                         }).join('')}
                             </div>
                         `;
 
-                        botBubble.innerHTML = fullText + sourcesHtml;
+                        // Ubah bagian ini agar fullText juga diparse menggunakan marked
+                        botBubble.innerHTML = marked.parse(fullText) + sourcesHtml;
+
                         const messages = document.getElementById('messages');
                         messages.scrollTop = messages.scrollHeight;
                     }

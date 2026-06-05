@@ -12,14 +12,14 @@ PROMPT_TEMPLATE = load_prompt("prompts.md")
 
 class ContextAssembler:
     def format_chunk(self, c: dict) -> str:
-        source = c.get("meta", {}).get("source", "-")
+        source = c.get("meta", {}).get("source", "Umum")
         text = c.get("text", "").strip()
 
-        return f"""[Sumber: {source}]\n{text}"""
+        return f"[{source}]\n{text}"
 
     def assemble(self, chunks: list[dict], question: str, history: list = []) -> str:
         try:
-            context = "\n\n=== CHUNK ===\n\n".join(self.format_chunk(c) for c in chunks)
+            context = "\n\n---\n\n".join(self.format_chunk(c) for c in chunks)
 
             if history:
                 history_text = "\n".join(
