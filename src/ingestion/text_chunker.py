@@ -22,6 +22,7 @@ SOURCE_LINKS = {
     "KB_PROGRAM_STUDI": "https://ft.unipma.ac.id/view/609",
     "KB_SISTEM_PENDIDIKAN": "https://ft.unipma.ac.id/view/609",
     "KB_PEDOMAN_SKRIPSI": "https://ft.unipma.ac.id/view/609",
+    "KB_FORM_PERMOHONAN": "https://ft.unipma.ac.id/view/621",
 }
 
 
