@@ -1,14 +1,22 @@
+import datetime
+import json
+import logging
 import os
+import queue
+import re
 import sys
+import threading
+import time
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
-import re
 
 from src.config.config import settings
 from src.core.generator import ContextAssembler, GeminiGenerator
 from src.core.retriever import Retriever
 from src.ingestion.document_loader import DocumentLoader
 from src.ingestion.text_chunker import TextChunker
+
+logger = logging.getLogger(__name__)
 
 
 class RAGPipeline:
@@ -19,11 +27,49 @@ class RAGPipeline:
         self.loader = DocumentLoader()
         self.chunker = TextChunker()
         self.history = []
+        self.model = settings.llm_model
+
+        self.log_queue = queue.Queue()
+        threading.Thread(target=self._log_worker, daemon=True).start()
+
+    def _log_worker(self):
+        """Worker background untuk menulis file log agar tidak memblokir aplikasi."""
+        while True:
+            log_entry = self.log_queue.get()
+            if log_entry is None:
+                break
+            try:
+                with open("rag_log.jsonl", "a", encoding="utf-8") as f:
+                    f.write(json.dumps(log_entry) + "\n")
+            except Exception as e:
+                print(f"Gagal menulis log: {e}")
+            self.log_queue.task_done()
+
+    def save_log(
+        self,
+        prompt: str,
+        question: str,
+        answer: str | None,
+        sources: list,
+        usage=None,
+        duration=0.0,
+        model_name="",
+    ):
+        log_entry = {
+            "timestamp": datetime.datetime.now().isoformat(),
+            "prompt": prompt,
+            "question": question,
+            "answer": answer,
+            "sources": sources,
+            "model": model_name,
+            "duration_seconds": round(duration, 3),
+            "prompt_tokens": usage.prompt_token_count if usage else 0,
+            "output_tokens": usage.candidates_token_count if usage else 0,
+            "total_tokens": usage.total_token_count if usage else 0,
+        }
+        self.log_queue.put(log_entry)
 
     def clean_response(self, text: str) -> str:
-        """
-        Membersihkan format jawaban AI agar lebih rapi
-        """
         if not text:
             return "Informasi tidak ditemukan dalam dokumen."
         text = text.strip()
@@ -44,14 +90,37 @@ class RAGPipeline:
             if source_name and source_name not in unique_sources:
                 unique_sources[source_name] = {
                     "name": source_name,
-                    "url": meta.get(
-                        "source_url", "#"
-                    ),  # Ambil URL, default '#' jika kosong
+                    "url": meta.get("source_url", "#"),
                 }
         sources = list(unique_sources.values())
         recent = self.history[-settings.conversation_window :]
         prompt = self.assembler.assemble(chunks, question, recent)
-        result = self.generator.generate(prompt)
+
+        start_time = time.time()
+        response = self.generator.generate(prompt)
+        duration = time.time() - start_time
+        usage = response.usage_metadata
+        if usage is not None:
+            logger.warning(
+                "Gemini Usage | model=%s | duration=%.2fs | input=%s | output=%s | total=%s",
+                self.model,
+                duration,
+                usage.prompt_token_count,
+                usage.candidates_token_count,
+                usage.total_token_count,
+            )
+        # answer
+        result = response.text
+
+        self.save_log(
+            prompt=prompt,
+            question=question,
+            answer=result,
+            sources=sources,
+            usage=usage,
+            duration=duration,
+            model_name=self.model,
+        )
         self.history.append({"question": question, "answer": result})
         return {"answer": result, "sources": sources}
 

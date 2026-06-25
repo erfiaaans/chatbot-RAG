@@ -1,18 +1,16 @@
-import logging
 import os
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-import time
 
 from google import genai
+from google.genai import types
 
 from src.config.config import settings
 from src.config.prompts import load_prompt
 
 PROMPT_TEMPLATE = load_prompt("prompts.md")
-logger = logging.getLogger(__name__)
 
 
 class ContextAssembler:
@@ -54,9 +52,8 @@ class GeminiGenerator:
         self.model = settings.llm_model
         print(f"Using Gemini model: {self.model}")
 
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str) -> types.GenerateContentResponse:
         try:
-            start_time = time.time()
             response = self.client.models.generate_content(
                 model=self.model,
                 contents=prompt,
@@ -65,19 +62,10 @@ class GeminiGenerator:
                     "max_output_tokens": settings.max_output_tokens,
                 },
             )
-            duration = time.time() - start_time
-            usage = response.usage_metadata
-            print("Response", usage)
-            if usage is not None:
-                logger.warning(
-                    "Gemini Usage | model=%s | duration=%.2fs | input=%s | output=%s | total=%s",
-                    self.model,
-                    duration,
-                    usage.prompt_token_count,
-                    usage.candidates_token_count,
-                    usage.total_token_count,
-                )
-            return response.text or ""
+
+            # return response.text or ""
+            return response
+
         except Exception as e:
             error_msg = str(e)
         if (
@@ -125,7 +113,8 @@ if __name__ == "__main__":
         print("-" * 40, flush=True)
 
         generator = GeminiGenerator()
-        answer = generator.generate(prompt)
+        response = generator.generate(prompt)
+        answer = response.text or ""
 
         print(f"Pertanyaan    : {question}", flush=True)
         print(f"Jawaban LLM   :\n{answer}", flush=True)

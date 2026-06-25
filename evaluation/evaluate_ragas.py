@@ -1,22 +1,19 @@
 import nest_asyncio
+
 nest_asyncio.apply()
 import asyncio
 import json
 import os
 import sys
 import time
-import argparse
-from typing import List, Optional
-
-from dotenv import load_dotenv
-from pydantic.v1 import SecretStr
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from typing import List
 
 from datasets import Dataset
+from dotenv import load_dotenv
 from langchain_core.embeddings import Embeddings
 from langchain_core.messages import HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
+from pydantic.v1 import SecretStr
 from ragas import evaluate
 from ragas.embeddings import LangchainEmbeddingsWrapper
 from ragas.llms import LangchainLLMWrapper
@@ -31,6 +28,8 @@ from ragas.metrics import (
 
 from src.core.rag_pipeline import RAGPipeline
 from src.services.embedding_service import EmbeddingService
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 PROGRESS_FILE = "evaluation/progress.json"
 OUTPUT_CSV = "evaluation/ragas_result.csv"
@@ -54,6 +53,7 @@ ALL_METRICS = [
     answer_similarity,
 ]
 
+
 # EMBEDDING_METRICS = [
 #     answer_relevancy,
 #     answer_similarity,
@@ -68,8 +68,10 @@ class LocalLangchainEmbeddings(Embeddings):
     def embed_query(self, text: str) -> List[float]:
         return self.service.embed_query(text)
 
+
 class SafeGemini(ChatGoogleGenerativeAI):
     """Hapus parameter 'temperature' yang tidak diterima Gemini API."""
+
     def generate(self, *args, **kwargs):
         kwargs.pop("temperature", None)
         return super().generate(*args, **kwargs)
@@ -77,6 +79,7 @@ class SafeGemini(ChatGoogleGenerativeAI):
     async def agenerate(self, *args, **kwargs):
         kwargs.pop("temperature", None)
         return await super().agenerate(*args, **kwargs)
+
 
 # ==========================================
 # PROGRESS SAVING (supaya tidak ulang dari awal kalau crash)
@@ -99,7 +102,8 @@ def save_progress(samples: list[dict]):
 def clear_progress():
     if os.path.exists(PROGRESS_FILE):
         os.remove(PROGRESS_FILE)
-        
+
+
 # ==========================================
 # CEK KONEKSI
 # ==========================================
@@ -125,6 +129,7 @@ async def check_connections(evaluator_llm, evaluator_embeddings, wrapped_llm):
     print("Mengecek wrapped LLM (Async)...")
     try:
         from langchain_core.prompt_values import StringPromptValue
+
         result = await wrapped_llm.agenerate_text(
             StringPromptValue(text="Halo, jawab singkat saja.")
         )
@@ -133,6 +138,7 @@ async def check_connections(evaluator_llm, evaluator_embeddings, wrapped_llm):
         print(f"  Wrapped LLM ERROR: {type(e).__name__}: {e}")
 
     return True
+
 
 # ==========================================
 # GENERATE JAWABAN (RAG PIPELINE)
@@ -145,14 +151,18 @@ def extract_text_from_chunk(chunk) -> str:
     return str(chunk).strip()
 
 
-def generate_samples(rag: RAGPipeline, test_data: list[dict], existing_samples: list[dict]) -> list[dict]:
+def generate_samples(
+    rag: RAGPipeline, test_data: list[dict], existing_samples: list[dict]
+) -> list[dict]:
     done_questions = {s["question"] for s in existing_samples}
     samples = list(existing_samples)
 
     remaining = [item for item in test_data if item["question"] not in done_questions]
     total = len(test_data)
 
-    print(f"\nTotal pertanyaan: {total} | Sudah diproses: {len(done_questions)} | Sisa: {len(remaining)}")
+    print(
+        f"\nTotal pertanyaan: {total} | Sudah diproses: {len(done_questions)} | Sisa: {len(remaining)}"
+    )
     print("=" * 60)
 
     for item in remaining:
@@ -164,7 +174,8 @@ def generate_samples(rag: RAGPipeline, test_data: list[dict], existing_samples: 
         try:
             retrieved_chunks = rag.retriever.retrieve(question)
             contexts = [
-                text for chunk in retrieved_chunks
+                text
+                for chunk in retrieved_chunks
                 if (text := extract_text_from_chunk(chunk))
             ]
 
@@ -173,7 +184,8 @@ def generate_samples(rag: RAGPipeline, test_data: list[dict], existing_samples: 
                 continue
 
             prompt = rag.assembler.assemble(retrieved_chunks, question, [])
-            answer = rag.generator.generate(prompt)
+            response = rag.generator.generate(prompt)
+            answer = response.text or ""
 
             if not answer or not answer.strip():
                 print("  SKIP: answer kosong")
@@ -182,12 +194,14 @@ def generate_samples(rag: RAGPipeline, test_data: list[dict], existing_samples: 
             print(f"  Answer: {answer[:150]}...")
             print(f"  Contexts: {len(contexts)} chunk")
 
-            samples.append({
-                "question": str(question),
-                "answer": str(answer),
-                "contexts": contexts,
-                "ground_truth": str(ground_truth),
-            })
+            samples.append(
+                {
+                    "question": str(question),
+                    "answer": str(answer),
+                    "contexts": contexts,
+                    "ground_truth": str(ground_truth),
+                }
+            )
 
             save_progress(samples)
 
@@ -198,6 +212,7 @@ def generate_samples(rag: RAGPipeline, test_data: list[dict], existing_samples: 
         time.sleep(SLEEP_GENERATE)
 
     return samples
+
 
 def main():
     # if sys.platform == "win32":
@@ -227,7 +242,9 @@ def main():
     wrapped_llm = LangchainLLMWrapper(evaluator_llm)
     wrapped_emb = LangchainEmbeddingsWrapper(evaluator_embeddings)
 
-    ok = asyncio.run(check_connections(evaluator_llm, evaluator_embeddings, wrapped_llm))
+    ok = asyncio.run(
+        check_connections(evaluator_llm, evaluator_embeddings, wrapped_llm)
+    )
     if not ok:
         sys.exit(1)
 
@@ -247,6 +264,7 @@ def main():
     dataset = Dataset.from_list(samples)
 
     from ragas.run_config import RunConfig
+
     result = evaluate(
         dataset=dataset,
         metrics=ALL_METRICS,
@@ -257,7 +275,7 @@ def main():
             max_retries=10,
             max_wait=120,
             timeout=300,
-        )
+        ),
     )
 
     result_df = result.to_pandas()
