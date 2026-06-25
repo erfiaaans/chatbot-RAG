@@ -1,13 +1,18 @@
+import logging
 import os
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+import time
+
 from google import genai
 
 from src.config.config import settings
 from src.config.prompts import load_prompt
 
 PROMPT_TEMPLATE = load_prompt("prompts.md")
+logger = logging.getLogger(__name__)
 
 
 class ContextAssembler:
@@ -51,6 +56,7 @@ class GeminiGenerator:
 
     def generate(self, prompt: str) -> str:
         try:
+            start_time = time.time()
             response = self.client.models.generate_content(
                 model=self.model,
                 contents=prompt,
@@ -59,6 +65,18 @@ class GeminiGenerator:
                     "max_output_tokens": settings.max_output_tokens,
                 },
             )
+            duration = time.time() - start_time
+            usage = response.usage_metadata
+            print("Response", usage)
+            if usage is not None:
+                logger.warning(
+                    "Gemini Usage | model=%s | duration=%.2fs | input=%s | output=%s | total=%s",
+                    self.model,
+                    duration,
+                    usage.prompt_token_count,
+                    usage.candidates_token_count,
+                    usage.total_token_count,
+                )
             return response.text or ""
         except Exception as e:
             error_msg = str(e)

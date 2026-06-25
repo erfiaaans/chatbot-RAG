@@ -51,7 +51,6 @@ class RAGPipeline:
         sources = list(unique_sources.values())
         recent = self.history[-settings.conversation_window :]
         prompt = self.assembler.assemble(chunks, question, recent)
-        print(prompt)
         result = self.generator.generate(prompt)
         self.history.append({"question": question, "answer": result})
         return {"answer": result, "sources": sources}
