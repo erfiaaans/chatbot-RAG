@@ -1,4 +1,5 @@
 import json
+import os
 import random
 import re
 import time
@@ -57,3 +58,20 @@ def chat():
 def reset():
     rag.reset_history()
     return jsonify({"status": "Riwayat percakapan direset."})
+
+
+@chat_bp.route("/logs", methods=["GET"])
+def get_logs():
+    log_data = []
+    try:
+        if not os.path.exists("rag_log.jsonl"):
+            return jsonify({"logs": []}), 200
+
+        with open("rag_log.jsonl", "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    log_data.append(json.loads(line))
+
+        return jsonify({"logs": log_data}), 200
+    except Exception as e:
+        return jsonify({"error": f"Gagal membaca log: {str(e)}"}), 500

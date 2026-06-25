@@ -68,15 +68,17 @@ class GeminiGenerator:
 
         except Exception as e:
             error_msg = str(e)
-        if (
-            "429" in error_msg
-            or "RESOURCE_EXHAUSTED" in error_msg
-            or "quota" in error_msg.lower()
-        ):
-            raise RuntimeError(
-                "Sistem sedang sibuk atau batas penggunaan harian telah tercapai. Mohon tunggu beberapa saat dan coba lagi."
-            )
-        raise RuntimeError(f"Gagal generate jawaban: {e}") from e
+
+            if (
+                "429" in error_msg
+                or "RESOURCE_EXHAUSTED" in error_msg
+                or "quota" in error_msg.lower()
+            ):
+                raise RuntimeError(
+                    "Sistem sedang sibuk atau batas penggunaan harian telah tercapai. Mohon tunggu beberapa saat dan coba lagi."
+                )
+
+            raise RuntimeError(f"Gagal generate jawaban: {e}") from e
 
 
 # Testing
