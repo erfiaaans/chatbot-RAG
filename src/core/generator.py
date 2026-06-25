@@ -2,7 +2,10 @@ import os
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+
 from google import genai
+from google.genai import types
 
 from src.config.config import settings
 from src.config.prompts import load_prompt
@@ -49,7 +52,7 @@ class GeminiGenerator:
         self.model = settings.llm_model
         print(f"Using Gemini model: {self.model}")
 
-    def generate(self, prompt: str) -> str:
+    def generate(self, prompt: str) -> types.GenerateContentResponse:
         try:
             response = self.client.models.generate_content(
                 model=self.model,
@@ -59,18 +62,23 @@ class GeminiGenerator:
                     "max_output_tokens": settings.max_output_tokens,
                 },
             )
-            return response.text or ""
+
+            # return response.text or ""
+            return response
+
         except Exception as e:
             error_msg = str(e)
-        if (
-            "429" in error_msg
-            or "RESOURCE_EXHAUSTED" in error_msg
-            or "quota" in error_msg.lower()
-        ):
-            raise RuntimeError(
-                "Sistem sedang sibuk atau batas penggunaan harian telah tercapai. Mohon tunggu beberapa saat dan coba lagi."
-            )
-        raise RuntimeError(f"Gagal generate jawaban: {e}") from e
+
+            if (
+                "429" in error_msg
+                or "RESOURCE_EXHAUSTED" in error_msg
+                or "quota" in error_msg.lower()
+            ):
+                raise RuntimeError(
+                    "Sistem sedang sibuk atau batas penggunaan harian telah tercapai. Mohon tunggu beberapa saat dan coba lagi."
+                )
+
+            raise RuntimeError(f"Gagal generate jawaban: {e}") from e
 
 
 # Testing
@@ -107,7 +115,8 @@ if __name__ == "__main__":
         print("-" * 40, flush=True)
 
         generator = GeminiGenerator()
-        answer = generator.generate(prompt)
+        response = generator.generate(prompt)
+        answer = response.text or ""
 
         print(f"Pertanyaan    : {question}", flush=True)
         print(f"Jawaban LLM   :\n{answer}", flush=True)

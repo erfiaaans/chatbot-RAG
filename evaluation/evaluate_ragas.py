@@ -1,4 +1,5 @@
 import nest_asyncio
+
 nest_asyncio.apply()
 import asyncio
 import json
@@ -16,9 +17,11 @@ from pydantic.v1 import SecretStr
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from datasets import Dataset
+from dotenv import load_dotenv
 from langchain_core.embeddings import Embeddings
 from langchain_core.messages import HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
+from pydantic.v1 import SecretStr
 from ragas import evaluate
 from ragas.embeddings import LangchainEmbeddingsWrapper
 from ragas.llms import LangchainLLMWrapper
@@ -33,6 +36,8 @@ from ragas.metrics import (
 
 from src.core.rag_pipeline import RAGPipeline
 from src.services.embedding_service import EmbeddingService
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 PROGRESS_FILE = "evaluation/progress.json"
 OUTPUT_CSV = "evaluation/ragas_result.csv"
@@ -112,6 +117,7 @@ class SafeGemini(ChatGoogleGenerativeAI):
         kwargs.pop("temperature", None)
         return await super()._agenerate(messages, stop=stop, run_manager=run_manager, **kwargs)
 
+
 # ==========================================
 # PROGRESS SAVING
 # ==========================================
@@ -171,6 +177,7 @@ async def check_connections(evaluator_llm, evaluator_embeddings, wrapped_llm):
     print("Mengecek wrapped LLM (Async)...")
     try:
         from langchain_core.prompt_values import StringPromptValue
+
         result = await wrapped_llm.agenerate_text(
             StringPromptValue(text="Halo, jawab singkat saja.")
         )
@@ -179,6 +186,7 @@ async def check_connections(evaluator_llm, evaluator_embeddings, wrapped_llm):
         print(f"  Wrapped LLM ERROR: {type(e).__name__}: {e}")
 
     return True
+
 
 # ==========================================
 # TAHAP 1: GENERATE JAWABAN (RAG PIPELINE)
@@ -209,7 +217,8 @@ def generate_samples(rag: RAGPipeline, test_data: list[dict], existing_samples: 
         try:
             retrieved_chunks = rag.retriever.retrieve(question)
             contexts = [
-                text for chunk in retrieved_chunks
+                text
+                for chunk in retrieved_chunks
                 if (text := extract_text_from_chunk(chunk))
             ]
 
@@ -224,7 +233,8 @@ def generate_samples(rag: RAGPipeline, test_data: list[dict], existing_samples: 
                 continue
 
             prompt = rag.assembler.assemble(retrieved_chunks, question, [])
-            answer = rag.generator.generate(prompt)
+            response = rag.generator.generate(prompt)
+            answer = response.text or ""
 
             if not answer or not answer.strip():
                 print("  SKIP: answer kosong")
@@ -274,7 +284,9 @@ def main():
     wrapped_llm = LangchainLLMWrapper(evaluator_llm)
     wrapped_emb = LangchainEmbeddingsWrapper(evaluator_embeddings)
 
-    ok = asyncio.run(check_connections(evaluator_llm, evaluator_embeddings, wrapped_llm))
+    ok = asyncio.run(
+        check_connections(evaluator_llm, evaluator_embeddings, wrapped_llm)
+    )
     if not ok:
         sys.exit(1)
 
