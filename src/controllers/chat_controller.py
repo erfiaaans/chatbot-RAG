@@ -75,3 +75,20 @@ def get_logs():
         return jsonify({"logs": log_data}), 200
     except Exception as e:
         return jsonify({"error": f"Gagal membaca log: {str(e)}"}), 500
+
+
+@chat_bp.route("/logs/embedding", methods=["GET"])
+def get_logs_embedding():
+    log_data = []
+    try:
+        if not os.path.exists("embedding_log.jsonl"):
+            return jsonify({"logs": []}), 200
+
+        with open("embedding_log.jsonl", "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    log_data.append(json.loads(line))
+
+        return jsonify({"logs": log_data}), 200
+    except Exception as e:
+        return jsonify({"error": f"Gagal membaca log: {str(e)}"}), 500

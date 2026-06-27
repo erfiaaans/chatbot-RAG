@@ -1,9 +1,10 @@
 import uuid
+
+from src.config.config import settings
 from src.ingestion.document_loader import DocumentLoader
 from src.ingestion.text_chunker import TextChunker
 from src.services.embedding_service import EmbeddingService
 from src.services.vector_store import VectorStore
-from src.config.config import settings
 
 
 class IngestionPipeline:
@@ -40,7 +41,9 @@ class IngestionPipeline:
 
         for doc in documents:
             chunks = self.chunker.chunk(text=doc["text"], metadata=doc)
-            vectors = [self.embedder.embed(c.text) for c in chunks]
+            vectors = [
+                self.embedder.embed(text=c.text, doc_id=c.doc_id) for c in chunks
+            ]
             all_chunks.extend(chunks)
             all_vectors.extend(vectors)
 
@@ -58,6 +61,7 @@ class IngestionPipeline:
             "total_files": len(documents),
             "total_chunks": len(all_chunks),
         }
+
     def run(self, file_path: str) -> dict:
         doc = self.loader.load(file_path)
 
@@ -83,6 +87,7 @@ class IngestionPipeline:
             "chunks": len(chunks),
             "doc_id": doc_id,
         }
+
     def run_folder(self, folder_path: str) -> dict:
         documents = self.loader.load_folder(folder_path)
 
@@ -111,6 +116,7 @@ class IngestionPipeline:
             "total_chunks": len(all_chunks),
             "doc_id": doc_id,
         }
+
     def re_ingest(self, file_path: str, doc_id: str) -> dict:
         self.store.delete(doc_id)
         return self.run(file_path)

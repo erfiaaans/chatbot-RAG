@@ -1,37 +1,135 @@
+import datetime
+import json
+import logging
 import os
+import queue
 import sys
+import threading
+import time
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 from dotenv import load_dotenv
-from sentence_transformers import SentenceTransformer
+from google import genai
+from google.genai import types
 
 from src.config.config import settings
 
 load_dotenv()
-_model = None
 
-
-def get_model():
-    global _model
-    if _model is None:
-        print("Loading embedding model...")
-        _model = SentenceTransformer(
-            settings.embedding_model,
-            cache_folder="./cache/hf_cache",
-        )
-        print("Embedding model berhasil di-load")
-    return _model
+logger = logging.getLogger(__name__)
 
 
 class EmbeddingService:
     def __init__(self):
-        self.model = get_model()
+        self.client = genai.Client(api_key=settings.gemini_api_key)
+        self.model_name = settings.embedding_model
 
-    def embed(self, text: str) -> list[float]:
-        return self.model.encode(text).tolist()
+        self.log_queue = queue.Queue()
+        threading.Thread(target=self._log_worker, daemon=True).start()
+
+    def _log_worker(self):
+        while True:
+            log_entry = self.log_queue.get()
+            if log_entry is None:
+                break
+            try:
+                with open("embedding_log.jsonl", "a", encoding="utf-8") as f:
+                    f.write(json.dumps(log_entry) + "\n")
+            except Exception as e:
+                logger.error(f"Gagal menulis log embedding: {e}")
+            self.log_queue.task_done()
+
+    def save_log(
+        self,
+        log_type: str,
+        text: str,
+        latency: float,
+        total_tokens: int,
+        doc_id: str | None = None,
+    ):
+        log_entry = {
+            "timestamp": datetime.datetime.now().isoformat(),
+            "type": log_type,
+            "model": self.model_name,
+            "doc_id": doc_id,
+            "chars_count": len(text),
+            "tokens_count": total_tokens,
+            "latency_seconds": round(latency, 3),
+            "text_snippet": text,
+        }
+        self.log_queue.put(log_entry)
+
+    def embed(self, text: str, doc_id: str | None = None) -> list[float]:
+        start_time = time.time()
+
+        total_tokens = len(text) // 4
+
+        result = self.client.models.embed_content(
+            model=self.model_name,
+            contents=text,
+            config=types.EmbedContentConfig(
+                task_type="RETRIEVAL_DOCUMENT", title="document"
+            ),
+        )
+
+        latency = time.time() - start_time
+
+        logger.warning(
+            f"[EMBED_DOC] {f'DocID: {doc_id} | ' if doc_id else ''}"
+            f"Model: {self.model_name} | "
+            f"Chars: {len(text)} | "
+            f"Tokens: ~{total_tokens} | "
+            f"Latency: {latency:.3f}s | "
+            f"Text: {text[:50]}..."
+        )
+
+        self.save_log(
+            log_type="EMBED_DOC",
+            text=text,
+            latency=latency,
+            total_tokens=total_tokens,
+            doc_id=doc_id,
+        )
+
+        if not result.embeddings or result.embeddings[0].values is None:
+            return []
+
+        return result.embeddings[0].values
 
     def embed_query(self, text: str) -> list[float]:
-        return self.model.encode(text).tolist()
+        start_time = time.time()
+
+        token_info = self.client.models.count_tokens(
+            model=self.model_name, contents=text
+        )
+        total_tokens = token_info.total_tokens
+
+        result = self.client.models.embed_content(
+            model=self.model_name,
+            contents=text,
+            config=types.EmbedContentConfig(task_type="RETRIEVAL_QUERY"),
+        )
+
+        latency = time.time() - start_time
+
+        logger.warning(
+            f"[EMBED_QUERY] Model: {self.model_name} | "
+            f"Chars: {len(text)} | Tokens: {total_tokens} | "
+            f"Latency: {latency:.3f}s | Text: {text}"
+        )
+
+        self.save_log(
+            log_type="EMBED_QUERY",
+            text=text,
+            latency=latency,
+            total_tokens=total_tokens,
+            doc_id=None,
+        )
+
+        if not result.embeddings or result.embeddings[0].values is None:
+            return []
+
+        return result.embeddings[0].values
 
 
 # Testing

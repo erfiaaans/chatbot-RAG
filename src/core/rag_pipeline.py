@@ -102,7 +102,7 @@ class RAGPipeline:
         usage = response.usage_metadata
         if usage is not None:
             logger.warning(
-                "Gemini Usage | model=%s | duration=%.2fs | input=%s | output=%s | total=%s",
+                "[Gemini Usage] | model=%s | duration=%.2fs | input=%s | output=%s | total=%s",
                 self.model,
                 duration,
                 usage.prompt_token_count,

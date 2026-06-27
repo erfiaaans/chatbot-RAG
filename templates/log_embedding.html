@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistem Log Embedding — Chatbot Academic TIF</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter", "sans-serif"] },
+          colors: {
+            brand: {
+              50: "#eff6ff",
+              100: "#dbeafe",
+              500: "#3b82f6",
+              600: "#2563eb",
+              700: "#1d4ed8",
+              900: "#1e3a8a",
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.5s ease both; }
+    
+    /* Styling untuk isi Markdown di dalam Modal */
+    .prose h1, .prose h2, .prose h3 { font-weight: 700; color: #1e293b; margin-top: 1em; margin-bottom: 0.5em; }
+    .prose p { margin-bottom: 1em; line-height: 1.6; }
+    .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
+    .prose strong { color: #0f172a; }
+    .prose pre { background: #f8fafc; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
+    .prose code { background: #f1f5f9; padding: 0.2em 0.4em; border-radius: 0.25rem; font-size: 0.875em; }
+  </style>
+</head>
+
+<body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
+  <header class="w-full px-6 py-4 bg-brand-600 sticky top-0 z-40 border-b border-brand-700">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3 text-white font-bold text-xl tracking-tight">
+        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-sm hover:bg-white/20 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+          </svg>
+        </div>
+        <div class="leading-tight">
+          <p class="text-base sm:text-lg font-semibold">Sistem Log Embedding</p>
+          <p class="text-xs text-blue-100 font-medium">Teknik Informatika - Universitas PGRI Madiun</p>
+        </div>
+      </a>
+      <div class="flex items-center gap-4 ml-auto">
+        <a href="/chatbot" class="hidden md:block px-4 py-2 rounded-xl bg-white text-brand-600 text-sm font-semibold shadow-sm hover:bg-blue-50 transition-colors">
+          Kembali ke Chat
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow p-6">
+    <div class="max-w-[98%] mx-auto fade-up">
+      
+      <div class="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-800">Riwayat Proses Embedding</h1>
+          <p class="text-sm text-slate-500 mt-1">Klik pada header kolom yang bertanda <span class="text-brand-600 font-bold">↕</span> untuk mengurutkan data (Ascending / Descending).</p>
+        </div>
+        <div class="flex items-center gap-3 w-full md:w-auto mt-2 md:mt-0">
+          <button onclick="fetchLogs()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-semibold rounded-lg flex gap-2 items-center transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Panel Ringkasan Penggunaan -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 mb-6 w-full lg:w-3/4 xl:w-2/3">
+        <div class="flex flex-wrap items-center gap-3 text-sm mb-4">
+          <span class="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg border border-blue-100">
+            <strong>Total Proses:</strong> <span id="summaryTotalJobs" class="font-bold">0</span>
+          </span>
+          <span class="flex items-center gap-2 bg-slate-100 text-slate-800 px-3 py-1.5 rounded-lg border border-slate-200">
+            <strong>Total Karakter:</strong> <span id="summaryChars" class="font-bold">0</span>
+          </span>
+          <span class="flex items-center gap-2 bg-brand-50 text-brand-700 px-3 py-1.5 rounded-lg border border-brand-100">
+            <strong>Total Token:</strong> <span id="summaryTokens" class="font-bold">0</span>
+          </span>
+        </div>
+
+        <div class="bg-slate-50 rounded-lg border border-slate-100 p-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-700">
+          <div class="space-y-1.5">
+            <p class="font-semibold text-slate-900 border-b border-slate-200 pb-1 mb-2">Informasi Model Embedding</p>
+            <p><span class="inline-block w-32 text-slate-500">Model:</span> <span class="font-medium text-slate-900">gemini-embedding-001</span></p>
+            <p><span class="inline-block w-32 text-slate-500">Dimensi Output:</span> <span class="font-medium">3072 dimensi</span></p>
+            <p><span class="inline-block w-32 text-slate-500">Harga Base:</span> <span class="text-xs font-mono">$0,15 / 1 Juta Token (Paket Berbayar)</span></p>
+          </div>
+          <!-- PERBAIKAN: Dihapus "flex flex-col justify-end" agar rata atas (sejajar) -->
+          <div class="space-y-1.5">
+            <p class="font-semibold text-slate-900 border-b border-slate-200 pb-1 mb-2">Estimasi Biaya (USD)</p>
+            <p><span class="inline-block w-32 text-slate-500">Total Biaya:</span> <strong class="text-green-600 font-mono text-lg">$<span id="estimatedCost">0.000000</span></strong></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-t-2xl shadow-sm border border-slate-200 border-b-0 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="relative w-full md:w-1/2 lg:w-1/3">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Cari berdasarkan Teks Cuplikan, Doc ID, atau Tipe..." class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all">
+        </div>
+      </div>
+
+      <div class="bg-white shadow-sm border border-slate-200 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left table-fixed min-w-[1200px]">
+            <thead class="bg-brand-50 text-brand-700 border-b border-brand-100 select-none">
+              <tr>
+                <th onclick="handleSort('timestamp')" class="px-4 py-4 font-semibold cursor-pointer hover:bg-brand-100 transition-colors w-40">Waktu <span id="sort-timestamp">↕</span></th>
+                <th onclick="handleSort('type')" class="px-4 py-4 font-semibold cursor-pointer hover:bg-brand-100 transition-colors w-32">Tipe <span id="sort-type">↕</span></th>
+                <th onclick="handleSort('doc_id')" class="px-4 py-4 font-semibold cursor-pointer hover:bg-brand-100 transition-colors w-40">Doc ID <span id="sort-doc_id">↕</span></th>
+                <th class="px-4 py-4 font-semibold w-1/3">Cuplikan Teks</th>
+                <th onclick="handleSort('model')" class="px-4 py-4 font-semibold cursor-pointer hover:bg-brand-100 transition-colors w-40">Model <span id="sort-model">↕</span></th>
+                <th onclick="handleSort('chars_count')" class="px-4 py-4 font-semibold cursor-pointer hover:bg-brand-100 transition-colors w-24">Karakter <span id="sort-chars_count">↕</span></th>
+                <th onclick="handleSort('tokens_count')" class="px-4 py-4 font-semibold cursor-pointer hover:bg-brand-100 transition-colors w-24">Token <span id="sort-tokens_count">↕</span></th>
+                <th onclick="handleSort('latency_seconds')" class="px-4 py-4 font-semibold cursor-pointer hover:bg-brand-100 transition-colors w-28">Durasi <span id="sort-latency_seconds">↕</span></th>
+              </tr>
+            </thead>
+            <tbody id="logTableBody" class="divide-y divide-slate-100">
+              <!-- Data akan dirender ke sini -->
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="bg-slate-50 border-t border-slate-200 px-4 py-3 flex items-center justify-between sm:px-6 rounded-b-2xl">
+          <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div>
+              <p class="text-sm text-slate-700" id="paginationInfo">
+                Menampilkan <span class="font-medium">0</span> hingga <span class="font-medium">0</span> dari <span class="font-medium">0</span> data
+              </p>
+            </div>
+            <div>
+              <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                <button onclick="changePage(-1)" id="btnPrev" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                </button>
+                <span id="pageNumbers" class="relative inline-flex items-center px-4 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-700">
+                  1 / 1
+                </span>
+                <button onclick="changePage(1)" id="btnNext" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                </button>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-brand-600 border-t border-brand-700 py-6 text-center text-xs text-white/90 mt-auto">
+    © 2026 Chatbot Akademik — Teknik Informatika Universitas PGRI Madiun.
+  </footer>
+
+  <div id="modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl flex flex-col max-h-[85vh] overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+        <h2 id="modalTitle" class="font-bold text-lg text-slate-800">Detail Konten Teks</h2>
+        <button onclick="closeModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto bg-white">
+        <div id="modalContent" class="prose prose-slate prose-sm max-w-none whitespace-pre-wrap font-mono bg-slate-50 p-4 rounded-lg border border-slate-200"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allLogsData = [];      
+    let filteredData = [];     
+    let currentPage = 1;       
+    const itemsPerPage = 15; 
+    
+    let currentSortColumn = 'timestamp';
+    let currentSortOrder = 'desc'; 
+
+    function formatDate(isoString) {
+      if (!isoString) return "-";
+      const date = new Date(isoString);
+      return date.toLocaleString('id-ID', {
+        day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+    }
+
+    // FUNGSI HITUNG TOTAL METRIK EMBEDDING & BIAYA
+    function calculateSummaryTotals() {
+      let charsSum = 0;
+      let tokensSum = 0;
+
+      filteredData.forEach(log => {
+        charsSum += parseInt(log.chars_count) || 0;
+        tokensSum += parseInt(log.tokens_count) || 0;
+      });
+
+      document.getElementById('summaryTotalJobs').innerText = filteredData.length.toLocaleString('id-ID');
+      document.getElementById('summaryChars').innerText = charsSum.toLocaleString('id-ID');
+      document.getElementById('summaryTokens').innerText = tokensSum.toLocaleString('id-ID');
+      
+      // Kalkulasi Estimasi Biaya (Harga: $0,15 per 1 Juta token)
+      const costPerMillion = 0.15;
+      const estimatedCost = (tokensSum / 1000000) * costPerMillion;
+      
+      // Menampilkan biaya hingga 6 angka di belakang koma untuk akurasi token yang kecil
+      document.getElementById('estimatedCost').innerText = estimatedCost.toFixed(6);
+    }
+
+    async function fetchLogs() {
+      const tbody = document.getElementById('logTableBody');
+      tbody.innerHTML = `<tr><td colspan="8" class="px-4 py-8 text-center text-slate-500">Memuat data log embedding...</td></tr>`;
+      
+      try {
+        // CATATAN: Ubah URL API ini sesuai dengan endpoint backend Anda
+        const res = await fetch('/api/logs/embedding'); 
+        const data = await res.json();
+        
+        if(data.logs && data.logs.length > 0) {
+          allLogsData = data.logs;
+        } else {
+          allLogsData = [];
+        }
+
+        document.getElementById('searchInput').value = ""; 
+        handleSearch(); 
+
+      } catch (error) {
+        console.error(error);
+        tbody.innerHTML = `<tr><td colspan="8" class="px-4 py-8 text-center text-red-500 font-semibold">Gagal memuat data log embedding. Pastikan endpoint API sudah benar.</td></tr>`;
+      }
+    }
+
+    function handleSearch() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      
+      if (!query) {
+        filteredData = [...allLogsData];
+      } else {
+        filteredData = allLogsData.filter(log => {
+          return (log.text_snippet || "").toLowerCase().includes(query) || 
+                 (log.doc_id || "").toLowerCase().includes(query) ||
+                 (log.type || "").toLowerCase().includes(query);
+        });
+      }
+      
+      applySort();
+      calculateSummaryTotals();
+    }
+
+    function handleSort(columnName) {
+      if (currentSortColumn === columnName) {
+        currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+      } else {
+        currentSortColumn = columnName;
+        currentSortOrder = 'asc';
+      }
+      applySort();
+    }
+
+    function applySort() {
+      filteredData.sort((a, b) => {
+        let valA = a[currentSortColumn];
+        let valB = b[currentSortColumn];
+
+        if (valA === undefined || valA === null) valA = '';
+        if (valB === undefined || valB === null) valB = '';
+
+        if (typeof valA === 'string') {
+          return currentSortOrder === 'asc' 
+            ? valA.localeCompare(valB) 
+            : valB.localeCompare(valA);
+        } 
+        else {
+          return currentSortOrder === 'asc' ? valA - valB : valB - valA;
+        }
+      });
+
+      updateSortIcons();
+      currentPage = 1; 
+      renderTable();
+    }
+
+    function updateSortIcons() {
+      const columns = ['timestamp', 'type', 'doc_id', 'model', 'chars_count', 'tokens_count', 'latency_seconds'];
+      columns.forEach(col => {
+        const el = document.getElementById(`sort-${col}`);
+        if (!el) return;
+        if (col === currentSortColumn) {
+          el.innerText = currentSortOrder === 'asc' ? ' ▲' : ' ▼';
+          el.className = "text-brand-600 font-bold";
+        } else {
+          el.innerText = ' ↕';
+          el.className = "text-slate-400";
+        }
+      });
+    }
+
+    function changePage(direction) {
+      const totalPages = Math.ceil(filteredData.length / itemsPerPage) || 1;
+      currentPage += direction;
+      if (currentPage < 1) currentPage = 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+      renderTable();
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('logTableBody');
+      tbody.innerHTML = '';
+
+      if(filteredData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="px-4 py-8 text-center text-slate-500">Data tidak ditemukan.</td></tr>`;
+        updatePaginationInfo();
+        return;
+      }
+
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const currentItems = filteredData.slice(startIndex, endIndex);
+
+      currentItems.forEach(log => {
+        const encodedText = btoa(unescape(encodeURIComponent(log.text_snippet || "")));
+        
+        // Styling badge untuk Tipe
+        let typeBadge = '';
+        if(log.type === "EMBED_DOC") {
+          typeBadge = `<span class="px-2 py-1 bg-blue-50 text-blue-700 text-[10px] font-bold rounded border border-blue-200">DOC</span>`;
+        } else {
+          typeBadge = `<span class="px-2 py-1 bg-green-50 text-green-700 text-[10px] font-bold rounded border border-green-200">QUERY</span>`;
+        }
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 transition-colors";
+        tr.innerHTML = `
+          <td class="px-4 py-3 text-slate-500 text-xs whitespace-nowrap align-middle">${formatDate(log.timestamp)}</td>
+          <td class="px-4 py-3 align-middle">${typeBadge}</td>
+          <td class="px-4 py-3 align-middle font-mono text-xs text-slate-600 break-words">${log.doc_id || '-'}</td>
+          <td class="px-4 py-3 align-middle text-slate-600">
+            <div class="line-clamp-2 text-xs mb-1">${log.text_snippet ? log.text_snippet : '-'}</div>
+            <button onclick="showModal('Cuplikan Teks (${log.type})', '${encodedText}')" class="text-[11px] font-semibold text-brand-600 hover:text-brand-800">Lihat Penuh &rarr;</button>
+          </td>
+          <td class="px-4 py-3 align-middle font-medium text-slate-700 text-xs">${log.model || '-'}</td>
+          <td class="px-4 py-3 align-middle text-slate-700 font-medium">${log.chars_count || 0}</td>
+          <td class="px-4 py-3 align-middle text-slate-900 font-bold">${log.tokens_count || 0}</td>
+          <td class="px-4 py-3 align-middle font-semibold text-slate-700">${log.latency_seconds ? log.latency_seconds + 's' : '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updatePaginationInfo();
+    }
+
+    function updatePaginationInfo() {
+      const totalItems = filteredData.length;
+      const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+      const startIndex = totalItems === 0 ? 0 : ((currentPage - 1) * itemsPerPage) + 1;
+      const endIndex = Math.min(currentPage * itemsPerPage, totalItems);
+
+      document.getElementById('paginationInfo').innerHTML = 
+        `Menampilkan <span class="font-medium">${startIndex}</span> hingga <span class="font-medium">${endIndex}</span> dari <span class="font-medium">${totalItems}</span> baris log`;
+      document.getElementById('pageNumbers').innerText = `${currentPage} / ${totalPages}`;
+
+      document.getElementById('btnPrev').disabled = (currentPage === 1);
+      document.getElementById('btnNext').disabled = (currentPage === totalPages);
+    }
+
+    function showModal(title, encodedContent) {
+      const content = decodeURIComponent(escape(atob(encodedContent)));
+      document.getElementById('modalTitle').innerText = title;
+      // Karena isi embedding biasanya raw text (bukan markdown), render ke plain div dengan font-mono
+      document.getElementById('modalContent').innerText = content;
+      document.getElementById('modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchLogs);
+  </script>
+</body>
+</html>

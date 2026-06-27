@@ -22,3 +22,4 @@ Thumbs.db
 cache
 
 rag_log.jsonl
+embedding_log.jsonl

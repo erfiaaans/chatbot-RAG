@@ -60,6 +60,11 @@ def logs():
     return render_template("log.html")
 
 
+@app.route("/logs/embedding")
+def logs_embedding():
+    return render_template("log_embedding.html")
+
+
 initialize_system()
 if __name__ == "__main__":
     print("--- Server berjalan di http://127.0.0.1:5000 ---")
